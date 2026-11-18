@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="pt-PT"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>Pedro Machado Fitness</title>
+<style>
+:root{--bg:#fafafa;--card:#fff;--tx:#111;--mu:#767676;--ac:#111;--on:#fff;--ac2:#efefef;--bd:#e2e2e2;--ok:#111;--bad:#8a8a8a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0c0c;--card:#161616;--tx:#f2f2f2;--mu:#8c8c8c;--ac:#f2f2f2;--on:#111;--ac2:#232323;--bd:#2b2b2b;--ok:#f2f2f2;--bad:#8c8c8c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c0c0c;--card:#161616;--tx:#f2f2f2;--mu:#8c8c8c;--ac:#f2f2f2;--on:#111;--ac2:#232323;--bd:#2b2b2b;--ok:#f2f2f2;--bad:#8c8c8c;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:600px;margin:0 auto;padding:14px 14px 40px}
+h2{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin:22px 0 8px}
+.logo{display:block;margin:6px auto 10px;height:96px;background:#fff;border-radius:10px;padding:6px 20px}
+.seg{display:flex;border-bottom:1px solid var(--bd);margin:10px 0 12px;overflow-x:auto}
+.seg button{flex:1;border:0;border-bottom:2px solid transparent;background:none;color:var(--mu);padding:10px 6px;font:inherit;font-weight:600;font-size:13px;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
+.seg button.on{color:var(--tx);border-bottom-color:var(--tx)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin:8px 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mu{color:var(--mu);font-size:13px}.b{font-weight:700}
+.btn{display:inline-block;border:1px solid var(--ac);background:var(--ac);color:var(--on);border-radius:8px;padding:8px 12px;font:inherit;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none}
+.btn.o{background:none;border-color:var(--bd);color:var(--tx)}.btn.on{background:var(--ac);border-color:var(--ac);color:var(--on)}.btn.r{background:none;border-color:var(--bd);color:var(--mu)}
+.btn:disabled{opacity:.4}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;margin:4px 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tag{font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:99px;border:1px solid var(--bd);color:var(--mu)}
+.tag.ok{color:var(--tx);border-color:var(--tx)}.tag.bad{color:var(--mu)}
+.notice{border-left:3px solid var(--ac)}
+.ac{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.big{font-size:26px;font-weight:800}
+summary{cursor:pointer}
+.ck{display:flex;align-items:center;gap:8px;margin:4px 0}.ck input{width:auto;margin:0}
+.ld{display:flex;align-items:center;gap:8px}.ld input{width:90px;margin:3px 0}.ld span{flex:1}
+.ph{width:72px;height:72px;object-fit:cover;border-radius:6px;margin:6px 6px 0 0}
+.chat{display:flex;flex-direction:column;gap:6px;max-height:55vh;overflow-y:auto;padding:8px 0}
+.msg{align-self:flex-start;max-width:82%;background:var(--ac2);border-radius:12px;padding:8px 12px}
+.msg.me{align-self:flex-end;background:var(--ac);color:var(--on)}
+.msg small{display:block;opacity:.6;font-size:11px}
+</style>
+</head><body><main id="app"></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+var SB_URL="https://mdyqhwjgbutxcfizpnjn.supabase.co",SB_KEY="sb_publishable_1Q3n1itK9eKjFBe6nFysow_q-hKYE4F";
+var sb=supabase.createClient(SB_URL,SB_KEY),me=null,ST=[],SE=[],PA=[],MS=[],tab="",ag="",cid=null,reg=false,LOGO="data:image/png;base64,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";
+var DW=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+function iso(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(x<10?"0":"")+x}
+var T=iso(new Date()),M=T.slice(0,7);
+function addD(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+function fd(s){var d=new Date(s+"T12:00:00");return DW[d.getDay()]+" "+d.getDate()+"/"+(d.getMonth()+1)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function $(i){return document.getElementById(i)}
+function eur(n){return Number(n).toFixed(2).replace(".",",")+" €"}
+function r1(x){return Math.round(x*10)/10}
+function stu(id){return ST.find(function(s){return s.id==id})}
+function age(b){if(!b)return null;var a=new Date(),x=new Date(b+"T12:00:00"),n=a.getFullYear()-x.getFullYear();if(a.getMonth()<x.getMonth()||(a.getMonth()==x.getMonth()&&a.getDate()<x.getDate()))n--;return n}
+function seg(a,c,f){return'<div class="seg">'+a.map(function(i){return'<button class="'+(i[0]==c?'on':'')+'" onclick="'+f+'(\''+i[0]+'\')">'+i[1]+'</button>'}).join('')+'</div>'}
+function B(l,c,f,id,a){return'<button class="btn '+c+'" onclick="'+f+'(\''+id+'\''+(a?',\''+a+'\'':'')+')">'+l+'</button>'}
+function er(t){var e=$("er");if(e)e.textContent=t}
+async function init(){var r=await sb.auth.getSession();if(r.data.session)await boot();else if(TEL)await telLoad();else R()}
+async function boot(){var u=(await sb.auth.getUser()).data.user,r=await sb.from("profiles").select("*").eq("id",u.id).single();me=r.data;if(!me){await sb.auth.signOut();R();return}if(me.role!="treinador"&&me.active===false){await sb.auth.signOut();me=null;R();er("A tua conta está desativada. Contacta o treinador.");return}
+tab=me.role=="treinador"?"ini":"mr";ag=T;await load();R();
+sb.channel("m").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},function(){if(tab=="ch")loadMsgs().then(R)}).subscribe()}
+async function load(){var a=await Promise.all([sb.from("profiles").select("*").eq("role","aluno").order("name"),sb.from("sessions").select("*").order("day").order("time"),sb.from("payments").select("*"),sb.from("exercises").select("*").order("name"),sb.from("plans").select("*").order("name"),sb.from("plan_items").select("*").order("pos"),sb.from("student_plans").select("*"),sb.from("loads").select("*"),sb.from("evaluations").select("*").order("day"),sb.from("meals").select("*").gte("day",addD(-60)),sb.from("loyalty").select("*").order("end_date"),sb.from("payment_methods").select("*"),sb.from("load_log").select("*").order("day"),sb.from("slots").select("*").order("day").order("time"),sb.from("weeks").select("*"),sb.from("bookings").select("*"),sb.from("week_decline").select("*"),sb.rpc("occupancy"),sb.from("msg_templates").select("*")]);SA=a[0].data||[];ST=SA.filter(function(s){return s.active!==false});SE=a[1].data||[];PA=a[2].data||[];EX=a[3].data||[];PL=a[4].data||[];PI=a[5].data||[];SPL=a[6].data||[];LD=a[7].data||[];EV=a[8].data||[];MLS=a[9].data||[];LY=a[10].data||[];PM={};(a[11].data||[]).forEach(function(x){PM[x.payment_id]=x.method});LL=a[12].data||[];SLOTS=a[13].data||[];WEEKS=a[14].data||[];BK=a[15].data||[];DEC=a[16].data||[];OC={};(a[17].data||[]).forEach(function(x){OC[x.slot_id]=Number(x.n)});TPL={};(a[18].data||[]).forEach(function(x){TPL[x.key]=x.body})}
+async function rl(){await load();R()}
+async function login(){var r=await sb.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value});if(r.error){var m=r.error.message||"";er(/not confirmed/i.test(m)?"Confirma primeiro o teu e-mail (vê a caixa de entrada e o spam).":/invalid login/i.test(m)?"E-mail ou palavra-passe incorretos, ou a conta ainda não existe.":"Erro: "+m);return}await boot()}
+async function signup(){var g=function(i){return $(i).value.trim()},n=g("rn"),e=g("em"),p=$("pw").value,b=g("rb"),x=g("rs"),h=+g("rh");
+if(!n||!e||p.length<8||!b||!x||!(h>0)){er("Preenche todos os campos (palavra-passe com 8 ou mais caracteres).");return}
+if(!$("c1").checked||!$("c2").checked){er("Para criar conta tens de aceitar a Política de Privacidade e o consentimento para dados de saúde.");return}var r=await sb.auth.signUp({email:e,password:p,options:{data:{name:n,birth:b,sex:x,height_cm:h,consent:"true",consent_version:CV}}});if(r.error){er(r.error.message);return}
+if(r.data.session)await boot();else{reg=false;R();er("Conta criada. Confirma o teu e-mail e depois entra.")}}
+async function reset(){var e=$("em").value.trim();if(!e){er("Escreve o teu e-mail.");return}await sb.auth.resetPasswordForEmail(e);er("Se o e-mail existir, enviámos uma ligação para criar nova palavra-passe.")}
+async function out(){await sb.auth.signOut();me=null;R()}
+function vAuth(){return(reg?'<input id="rn" placeholder="Nome"><label class="mu">Data de nascimento</label><input id="rb" type="date"><div class="g2"><select id="rs"><option value="">Género</option><option value="M">Masculino</option><option value="F">Feminino</option></select><input id="rh" type="number" placeholder="Altura (cm)"></div>':'')+'<input id="em" type="email" placeholder="E-mail" autocomplete="email"><input id="pw" type="password" placeholder="Palavra-passe" autocomplete="'+(reg?'new-password':'current-password')+'">'+(reg?consentH():'')+'<div id="er" class="mu" style="margin:6px 0"></div><button class="btn" onclick="'+(reg?'signup()':'login()')+'">'+(reg?'Criar conta':'Entrar')+'</button> <button class="btn o" onclick="reg=!reg;R()">'+(reg?'Já tenho conta':'Criar conta')+'</button>'+(reg?'':'<p><a href="#" class="mu" onclick="reset();return false">Esqueci-me da palavra-passe</a></p>')}
+async function setTab(t){tab=t;if(t=="ch")await loadMsgs();R()}
+/* Agenda (treinador) */
+function vAg(){var h='<input type="date" value="'+ag+'" onchange="ag=this.value;R()">',L=SE.filter(function(x){return x.day==ag&&stu(x.student_id)}),ts=[];
+L.forEach(function(x){var t=x.time.slice(0,5);if(ts.indexOf(t)<0)ts.push(t)});ts.sort();
+if(!ts.length)h+='<p class="mu">Sem treinos marcados para '+fd(ag)+'.</p>';
+ts.forEach(function(t){var G=L.filter(function(x){return x.time.slice(0,5)==t});h+='<div class="card"><div class="b" style="font-size:18px">'+t+' <span class="mu">· '+G.length+' '+(G.length>1?'pessoas':'pessoa')+'</span></div>';
+G.forEach(function(x){var s=stu(x.student_id),ph=(s.phone||"").replace(/\D/g,""),m="Olá "+s.name.split(" ")[0]+"! Lembrete do teu treino "+(x.day==T?"hoje":fd(x.day))+" às "+t+" no Pedro Machado Fitness. Até já!";
+h+='<div style="border-top:1px solid var(--bd);padding:8px 0 2px;margin-top:8px"><span class="b">'+esc(s.name)+'</span> <span class="tag">'+s.type+'</span><div class="mu">'+(x.student_done?'✓ Aluno confirmou o treino · ':'')+(x.attendance=="presente"?'Presente':x.attendance=="faltou"?'Faltou':'Presença por confirmar')+'</div><div class="ac">'+B("Presente",x.attendance=="presente"?"on":"o","setAtt",x.id,"presente")+B("Faltou",x.attendance=="faltou"?"r":"o","setAtt",x.id,"faltou")+(ph?'<a class="btn o" target="_blank" href="https://wa.me/'+ph+'?text='+encodeURIComponent(m)+'">Lembrete</a>':'')+B("×","r","delSe",x.id)+'</div></div>'});h+='</div>'});
+return h+'<h2>Marcar treino</h2><div class="card"><div class="g2"><input id="sd" type="date" value="'+ag+'"><input id="stm" type="time" value="18:00"></div>'+ST.map(function(s){return'<label class="ck"><input type="checkbox" id="ck'+s.id+'">'+esc(s.name)+' <span class="tag">'+s.type+'</span></label>'}).join('')+'<button class="btn" onclick="addSe()">Marcar</button></div>'}
+async function setAtt(id,v){var x=SE.find(function(s){return s.id==id});await sb.from("sessions").update({attendance:x.attendance==v?null:v}).eq("id",id);await rl()}
+async function delSe(id){await sb.from("sessions").delete().eq("id",id);await rl()}
+async function addSe(){var d=$("sd").value,t=$("stm").value,rows=ST.filter(function(s){return $("ck"+s.id).checked}).map(function(s){return{student_id:s.id,day:d,time:t}});if(!d||!t||!rows.length)return;var r=await sb.from("sessions").insert(rows);if(r.error){alert(r.error.message);return}ag=d;await rl()}
+/* Alunos (treinador) */
+async function upd(id,k,v){var o={};o[k]=(k=="fee"||k.indexOf("goal_")==0)?(v===""?null:+v):v;var r=await sb.from("profiles").update(o).eq("id",id);if(r.error)alert(r.error.message);else stu(id)[k]=o[k]}
+function vAl(){if(!SA.length)return clForm()+'<p class="mu">Ainda não há alunos.</p>';
+return clForm()+'<label class="ck"><input type="checkbox" '+(showIn?'checked':'')+' onchange="showIn=this.checked;R()">Mostrar alunos inativos</label>'+SA.filter(function(s){return showIn||s.active!==false}).map(function(s){var a=age(s.birth);return'<details class="card" '+(op[s.id]?'open':'')+' ontoggle="op[\''+s.id+'\']=this.open"><summary class="b">'+esc(s.name)+' <span class="tag">'+s.type+'</span>'+(s.active===false?' <span class="tag">Inativo</span>':'')+(s.novo?' <span class="tag">Novo</span>':'')+(s.via_tel?' <span class="tag">Só marcações</span>':'')+'</summary><div class="mu">'+esc(s.email||"")+'<br>'+(a!=null?a+' anos':'—')+' · '+(s.sex=="M"?'Masculino':s.sex=="F"?'Feminino':'—')+' · '+(s.height_cm||'—')+' cm<br>Consentimento: '+(s.consent_at?dfmt(s.consent_at.slice(0,10)):'não registado')+'</div><div class="g2"><select onchange="upd(\''+s.id+'\',\'type\',this.value)"><option'+(s.type=="PT"?' selected':'')+'>PT</option><option'+(s.type=="Grupo"?' selected':'')+'>Grupo</option></select><input type="number" placeholder="Mensalidade €" value="'+s.fee+'" onchange="upd(\''+s.id+'\',\'fee\',this.value)"></div><input placeholder="Telemóvel com indicativo (351…)" value="'+esc(s.phone)+'" onchange="upd(\''+s.id+'\',\'phone\',this.value)">'+cliH(s)+payRow(s)+goalsH(s)+planSel(s)+loadsH(s.id)+'<div class="mu" style="margin-top:8px">Avaliações</div>'+evCharts(s)+evH(s,false)+'<div class="mu" style="margin-top:8px">Nutrição hoje: '+nsum(s.id)+'</div>'+actH(s)+'</details>'}).join('')}
+/* Finanças (treinador) */
+function paid(id){return PA.some(function(p){return p.student_id==id&&p.month==M})}
+async function payTog(id){var s=stu(id),r;if(paid(id)){if(!confirm("Anular o pagamento deste mês?"))return;r=await sb.from("payments").delete().eq("student_id",id).eq("month",M)}else{var v=parseFloat($("pa"+id).value);if(isNaN(v)||v<0){alert("Indica o valor.");return}r=await sb.from("payments").insert({student_id:id,month:M,amount:v}).select().single();if(!r.error){var r2=await sb.from("payment_methods").insert({payment_id:r.data.id,method:$("pm"+id).value});if(r2.error)alert(r2.error.message)}}if(r.error)alert(r.error.message);await rl()}
+function fin(A){var ids=A.map(function(s){return s.id}),P=PA.filter(function(p){return ids.indexOf(p.student_id)>=0}),ms=[],AC=A.filter(function(s){return s.active!==false}),k=Math.max(AC.length,1),sum=function(a,f){return a.reduce(function(t,x){return t+Number(f(x))},0)};PA.forEach(function(p){if(ms.indexOf(p.month)<0)ms.push(p.month)});
+var pv=sum(AC,function(s){return s.fee}),tt=sum(P,function(p){return p.amount}),mt=sum(P.filter(function(p){return p.month==M}),function(p){return p.amount});return{n:AC.length,pv:pv,tt:tt,mt:mt,av:pv/k,ar:tt/Math.max(ms.length,1)/k}}
+function fc(t,f){return'<div class="card"><div class="b">'+t+' <span class="mu">· '+f.n+' alunos</span></div><div class="g2"><div><div class="mu">Cobrado este mês</div><div class="b">'+eur(f.mt)+'</div></div><div><div class="mu">Por cobrar</div><div class="b">'+eur(Math.max(f.pv-f.mt,0))+'</div></div><div><div class="mu">Previsão mensal</div><div class="b">'+eur(f.pv)+'</div></div><div><div class="mu">Faturação total</div><div class="b">'+eur(f.tt)+'</div></div></div><div class="mu" style="margin-top:6px">Média mensal por aluno</div><div class="b">'+eur(f.av)+' <span class="mu">(mensalidades)</span></div><div class="b">'+eur(f.ar)+' <span class="mu">(cobrado)</span></div></div>'}
+function vFi(){var f=fin(SA),h='<p><button class="btn o" onclick="expPag()">Exportar pagamentos (Excel / Google Sheets)</button></p><div class="g2"><div class="card"><div class="mu">Cobrado este mês</div><div class="big">'+eur(f.mt)+'</div></div><div class="card"><div class="mu">Faturação total</div><div class="big">'+eur(f.tt)+'</div></div></div>'+cnt()+mth()+'<h2>Por tipo de treino</h2>'+fc("Personal Training",fin(SA.filter(function(s){return s.type=="PT"})))+fc("Treino de grupo",fin(SA.filter(function(s){return s.type!="PT"})))+'<h2>Pagamentos de '+new Date().toLocaleDateString("pt-PT",{month:"long"})+'</h2>';
+ST.forEach(function(s){h+=payRow(s)});return h}
+/* Aluno */
+async function conf(id){var r=await sb.rpc("confirmar_treino",{sid:id});if(r.error)alert(r.error.message);await rl()}
+function vTr(){var h="",L=SE.filter(function(x){return x.day>=addD(-7)});
+L.filter(function(x){return x.day==T&&!x.student_done}).forEach(function(x){h+='<div class="card notice b">🔔 Hoje tens treino às '+x.time.slice(0,5)+'</div>'});
+h+='<h2>Os meus horários</h2>';if(!L.length)h+='<p class="mu">Ainda não tens treinos marcados.</p>';
+L.forEach(function(x){h+='<div class="card row"><div><div class="b">'+fd(x.day)+' · '+x.time.slice(0,5)+'</div><div class="mu">'+(x.attendance=="presente"?'Presença confirmada':x.attendance=="faltou"?'Faltaste':x.student_done?'Feito':'Marcado')+'</div></div><button class="btn '+(x.student_done?'on':'')+'" '+(x.day>T?'disabled':'')+' onclick="conf(\''+x.id+'\')">'+(x.student_done?'✓ Treino feito':'Confirmar treino')+'</button></div>'});
+return h+fzMe()+'<h2>Os meus planos</h2><div class="card">'+loadsH(me.id)+'</div><h2>Mensalidade</h2><div class="card"><span class="tag '+(paid(me.id)?'ok':'bad')+'">'+(paid(me.id)?'✓ Pagamento deste mês registado':'Pagamento deste mês pendente')+'</span></div>'}
+async function updMe(k,v){var o={};o[k]=k=="height_cm"?+v:v;var r=await sb.from("profiles").update(o).eq("id",me.id);if(r.error)alert(r.error.message);else{me[k]=o[k];R()}}
+function vPf(){var a=age(me.birth);return'<div class="card"><div class="b">'+esc(me.name)+(a!=null?' <span class="mu">· '+a+' anos</span>':'')+'</div><div class="mu">'+esc(me.email||"")+'</div><label class="mu">Data de nascimento</label><input type="date" value="'+(me.birth||"")+'" onchange="updMe(\'birth\',this.value)"><div class="g2"><div><label class="mu">Género</label><select onchange="updMe(\'sex\',this.value)"><option value="M"'+(me.sex=="M"?' selected':'')+'>Masculino</option><option value="F"'+(me.sex=="F"?' selected':'')+'>Feminino</option></select></div><div><label class="mu">Altura (cm)</label><input type="number" value="'+(me.height_cm||"")+'" onchange="updMe(\'height_cm\',this.value)"></div></div></div>'+privH()}
+/* Chat */
+async function loadMsgs(){if(me.role!="treinador")cid=me.id;else if(!cid&&ST[0])cid=ST[0].id;if(!cid){MS=[];return}var r=await sb.from("messages").select("*").eq("student_id",cid).order("created_at");MS=r.data||[]}
+function vCh(){var h="";if(me.role=="treinador"){if(!ST.length)return'<p class="mu">Ainda não há alunos.</p>';h='<select onchange="cid=this.value;loadMsgs().then(R)">'+ST.map(function(s){return'<option value="'+s.id+'"'+(s.id==cid?' selected':'')+'>'+esc(s.name)+'</option>'}).join('')+'</select>'}
+return h+'<div class="chat">'+(MS.length?MS.map(function(m){return'<div class="msg'+(m.sender==me.id?' me':'')+'">'+esc(m.body)+'<small>'+new Date(m.created_at).toLocaleString("pt-PT",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})+'</small></div>'}).join(''):'<p class="mu">Ainda sem mensagens.</p>')+'</div><div class="row"><input id="zt" placeholder="Escreve uma mensagem" style="margin:0"><button class="btn" onclick="send()">Enviar</button></div>'}
+async function send(){var x=$("zt").value.trim();if(!x||!cid)return;var r=await sb.from("messages").insert({student_id:cid,body:x});if(r.error){alert(r.error.message);return}await loadMsgs();R()}
+var EX=[],PL=[],PI=[],SPL=[],LD=[],op={},CATS=["Pernas","Glúteos","Empurrar","Puxar","Core","Pliometria","Cardio","Carregar","Mobilidade"];
+function nrm(x){return x.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()}
+function exf(){var q=nrm($("exq").value),c=$("exc").value;document.querySelectorAll(".exr").forEach(function(r){r.style.display=nrm(r.dataset.n).indexOf(q)>=0&&(!c||r.dataset.c==c)?"":"none"})}
+function catOpts(all){return(all?'<option value="">Todas as categorias</option>':'')+CATS.map(function(c){return'<option>'+c+'</option>'}).join('')}
+function vEx(){var h='<div class="card"><div class="b">Novo exercício</div><input id="en" placeholder="Nome do exercício"><select id="ec">'+catOpts()+'</select><input id="eo" placeholder="Notas (opcional)"><button class="btn" onclick="addEx()">Criar exercício</button></div><h2>Banco de exercícios · '+EX.length+'</h2><input id="exq" placeholder="Pesquisar…" oninput="exf()"><select id="exc" onchange="exf()">'+catOpts(true)+'</select>';
+EX.forEach(function(e){h+='<div class="card row exr" data-n="'+esc(e.name)+'" data-c="'+esc(e.category)+'"><div><div class="b">'+esc(e.name)+'</div><div class="mu">'+esc(e.category)+(e.custom?' · criado por ti':'')+(e.notes?' · '+esc(e.notes):'')+'</div></div>'+B("×","r","delEx",e.id)+'</div>'});return h}
+async function addEx(){var n=$("en").value.trim();if(!n)return;var r=await sb.from("exercises").insert({name:n,category:$("ec").value,notes:$("eo").value.trim()||null,custom:true});if(r.error){alert(r.error.code=="23505"?"Esse exercício já existe.":r.error.message);return}await rl()}
+async function delEx(id){if(!confirm("Apagar este exercício do banco? Os planos que já o usam mantêm o nome."))return;await sb.from("exercises").delete().eq("id",id);await rl()}
+function items(pid){return PI.filter(function(i){return i.plan_id==pid}).sort(function(a,b){return a.pos-b.pos})}
+function pxo(pid){var q=nrm($("pq"+pid).value);$("ps"+pid).innerHTML=EX.map(function(e){return nrm(e.name+" "+e.category).indexOf(q)>=0?'<option value="'+e.id+'">'+esc(e.name)+' ('+esc(e.category)+')</option>':''}).join('')}
+function vPl(){var h='<div class="card"><div class="b">Novo plano</div><input id="pn" placeholder="Nome do plano (ex: Funcional A · Full body)"><button class="btn" onclick="addPl()">Criar plano</button></div>';
+PL.forEach(function(p){var I=items(p.id);h+='<details class="card" '+(op[p.id]?'open':'')+' ontoggle="op[\''+p.id+'\']=this.open"><summary class="b">'+esc(p.name)+' <span class="mu">· '+I.length+' exercícios</span></summary>'+I.map(function(i,k){return'<div class="ld"><span>'+(k+1)+'. '+esc(i.name)+'</span><input value="'+esc(i.detail)+'" onchange="setDt(\''+i.id+'\',this.value)">'+B("×","r","delIt",i.id)+'</div>'}).join('')+'<div class="mu" style="margin-top:8px">Adicionar do banco</div><input id="pq'+p.id+'" placeholder="Pesquisar exercício…" oninput="pxo(\''+p.id+'\')"><select id="ps'+p.id+'">'+EX.map(function(e){return'<option value="'+e.id+'">'+esc(e.name)+' ('+esc(e.category)+')</option>'}).join('')+'</select><div class="g2"><input id="pd'+p.id+'" placeholder="Séries x reps (ex: 3x12)"><button class="btn" onclick="addIt(\''+p.id+'\')">Adicionar</button></div>'+assignH(p)+'<p>'+B("Apagar plano","r","delPl",p.id)+'</p></details>'});return h}
+async function addPl(){var n=$("pn").value.trim();if(!n)return;var r=await sb.from("plans").insert({name:n});if(r.error)alert(r.error.message);await rl()}
+async function delPl(id){if(!confirm("Apagar este plano?"))return;await sb.from("plans").delete().eq("id",id);await rl()}
+async function addIt(pid){var e=EX.find(function(x){return x.id==$("ps"+pid).value});if(!e)return;var I=items(pid),r=await sb.from("plan_items").insert({plan_id:pid,pos:I.length?Math.max.apply(null,I.map(function(i){return i.pos}))+1:0,exercise_id:e.id,name:e.name,detail:$("pd"+pid).value.trim()||"3x10"});if(r.error)alert(r.error.message);op[pid]=true;await rl()}
+async function delIt(id){var it=PI.find(function(i){return i.id==id});if(it)op[it.plan_id]=true;await sb.from("plan_items").delete().eq("id",id);await rl()}
+async function setDt(id,v){await sb.from("plan_items").update({detail:v}).eq("id",id)}
+function planSel(s){return'<div class="mu" style="margin-top:6px">Planos do aluno</div>'+(PL.length?PL.map(function(p){return'<label class="ck"><input type="checkbox" '+(SPL.some(function(x){return x.student_id==s.id&&x.plan_id==p.id})?'checked':'')+' onchange="togPl(\''+s.id+'\',\''+p.id+'\')">'+esc(p.name)+'</label>'}).join(''):'<p class="mu">Cria primeiro um plano.</p>')+'<div class="mu" style="margin-top:6px">Cargas (kg)</div>'}
+async function togPl(sid,pid){op[sid]=true;var has=SPL.some(function(x){return x.student_id==sid&&x.plan_id==pid}),r=has?await sb.from("student_plans").delete().eq("student_id",sid).eq("plan_id",pid):await sb.from("student_plans").insert({student_id:sid,plan_id:pid});if(r.error)alert(r.error.message);await rl()}
+function ldf(sid,pid,pos){return LD.find(function(l){return l.student_id==sid&&l.plan_id==pid&&l.exercise_idx==pos})}
+async function setLd(sid,pid,pos,v){var kg=v===""?null:+v;var r=await sb.from("loads").upsert({student_id:sid,plan_id:pid,exercise_idx:pos,kg:kg,updated_at:new Date().toISOString()},{onConflict:"student_id,plan_id,exercise_idx"});if(r.error){alert(r.error.message);return}if(kg!=null){var r3=await sb.from("load_log").upsert({student_id:sid,plan_id:pid,exercise_idx:pos,kg:kg,day:T},{onConflict:"student_id,plan_id,exercise_idx,day"});if(!r3.error){var y=LL.find(function(q){return q.student_id==sid&&q.plan_id==pid&&q.exercise_idx==pos&&q.day==T});if(y)y.kg=kg;else LL.push({student_id:sid,plan_id:pid,exercise_idx:pos,kg:kg,day:T})}}var x=ldf(sid,pid,pos);if(x)x.kg=kg;else LD.push({student_id:sid,plan_id:pid,exercise_idx:pos,kg:kg})}
+function loadsH(sid){var h="";SPL.filter(function(x){return x.student_id==sid}).forEach(function(x){var p=PL.find(function(q){return q.id==x.plan_id});if(!p)return;h+='<div class="b" style="margin-top:8px">'+esc(p.name)+'</div>';items(p.id).forEach(function(i){var l=ldf(sid,p.id,i.pos);h+='<div class="ld"><span>'+esc(i.name)+' <span class="mu">'+esc(i.detail)+'</span></span><input type="number" step="0.5" placeholder="kg" value="'+(l&&l.kg!=null?l.kg:"")+'" onchange="setLd(\''+sid+'\',\''+p.id+'\','+i.pos+',this.value)"></div>'+lhist(sid,p.id,i.pos)})});return h||'<p class="mu">Sem planos atribuídos.</p>'}
+var EV=[];
+function ageAt(b,d){if(!b)return null;var a=new Date((d||T)+"T12:00:00"),x=new Date(b+"T12:00:00"),n=a.getFullYear()-x.getFullYear();if(a.getMonth()<x.getMonth()||(a.getMonth()==x.getMonth()&&a.getDate()<x.getDate()))n--;return n}
+function cl(b){return b<18.5?"Abaixo do peso":b<25?"Normal":b<30?"Excesso de peso":"Obesidade"}
+function calc(s,w,d){var a=ageAt(s.birth,d);if(!s.height_cm||a==null||!s.sex||!(w>0))return null;return{bmi:w/Math.pow(s.height_cm/100,2),bmr:10*w+6.25*s.height_cm-5*a+(s.sex=="M"?5:-161)}}
+function calcEv(){var el=$("yc");if(!el)return;var w=parseFloat($("yw").value),c=calc(me,w,$("yd").value||T);
+el.innerHTML=!me.height_cm||!me.birth||!me.sex?'Completa a altura, a data de nascimento e o género no separador Perfil para calcular o IMC e a TMB.':!(w>0)?'O IMC e a TMB são calculados automaticamente ao preencher o peso.':'IMC <b>'+r1(c.bmi)+'</b> ('+cl(c.bmi)+') · TMB <b>'+Math.round(c.bmr)+' kcal</b>'}
+async function addEv(){var v=function(i){return parseFloat($(i).value)},w=v("yw"),g=v("yg"),m=v("ym"),z=v("yv");
+if(!me.height_cm||!me.birth||!me.sex){alert("Completa primeiro o Perfil: altura, data de nascimento e género.");return}
+if([w,g,m,z].some(isNaN)){alert("Preenche peso, massa gorda, massa muscular e gordura visceral.");return}
+var r=await sb.from("evaluations").insert({day:$("yd").value||T,weight_kg:w,body_fat_pct:g,muscle_kg:m,visceral:z});if(r.error){alert(r.error.message);return}await rl()}
+async function delEv(id){if(!confirm("Apagar esta avaliação?"))return;await sb.from("evaluations").delete().eq("id",id);await rl()}
+function evH(s,del){var L=EV.filter(function(e){return e.student_id==s.id}).sort(function(a,b){return a.day<b.day?-1:1});if(!L.length)return'<p class="mu">Sem avaliações registadas.</p>';
+var dl=function(e,p,k){if(!p)return"";var x=e[k]-p[k];return x?' <span class="mu">('+(x>0?"+":"")+r1(x)+')</span>':""};
+return L.map(function(e,i){var p=L[i-1],c=calc(s,e.weight_kg,e.day);return'<div class="card"><div class="row"><span class="b">'+e.day.split("-").reverse().join("/")+'</span>'+(del?B("×","r","delEv",e.id):'')+'</div><div class="g2"><div>Peso <b>'+e.weight_kg+' kg</b>'+dl(e,p,"weight_kg")+'</div><div>Gorda <b>'+e.body_fat_pct+'%</b>'+dl(e,p,"body_fat_pct")+'</div><div>Músculo <b>'+e.muscle_kg+' kg</b>'+dl(e,p,"muscle_kg")+'</div><div>Visceral <b>'+e.visceral+'</b>'+dl(e,p,"visceral")+'</div><div>IMC <b>'+(c?r1(c.bmi):"—")+'</b> <span class="mu">'+(c?cl(c.bmi):"")+'</span></div><div>TMB <b>'+(c?Math.round(c.bmr)+" kcal":"—")+'</b></div></div></div>'}).reverse().join('')}
+function vEv(){return'<div class="card"><div class="b">Nova avaliação</div><label class="mu">Data</label><input id="yd" type="date" value="'+T+'" onchange="calcEv()"><div class="g2"><div><label class="mu">Peso (kg) *</label><input id="yw" type="number" step="0.1" oninput="calcEv()"></div><div><label class="mu">Massa gorda (%) *</label><input id="yg" type="number" step="0.1"></div><div><label class="mu">Massa muscular (kg) *</label><input id="ym" type="number" step="0.1"></div><div><label class="mu">Gordura visceral *</label><input id="yv" type="number" step="0.5"></div></div><div id="yc" class="mu" style="margin:8px 0"></div><button class="btn" onclick="addEv()">Guardar avaliação</button></div><h2>Evolução</h2>'+evCharts(me)+evH(me,true)}
+var MLS=[],nd=T,RF=["Pequeno-almoço","Almoço","Lanche","Jantar","Ceia"];
+var DB=`Abacate, Hass|176|1.1|2.3|17.4
+Abóbora cristalizada|293|0|72.4|0.2
+Abóbora crua|11|0.3|1.7|0.2
+Abrótea cozida|79|19.4|0|0.1
+Abrótea crua|70|17.2|0|0.1
+Açafrão|353|11.4|61.5|5.9
+Açafrão-da-índia seco|312|6.7|44.1|7
+Acelga crua|23|1.8|2.7|0.2
+Achocolatado com alto teor de gordura, pó|428|12|70.6|10.6
+Achocolatado com baixo teor de gordura, pó|395|6.5|86.2|2.5
+Açorda|104|3.3|13.1|4
+Açorda à alentejana|95|3.5|12.3|3.3
+Açorda de bacalhau|69|3.4|5.7|3.5
+Açorda de marisco|51|4.5|5.4|1.2
+Açorda de ovo|108|3.6|14|4
+Açúcar amarelo|390|0|97.5|0
+Açúcar branco|397|0|99.3|0
+Agrião cru|29|3.4|0.4|0.9
+Água mineral natural gaseificada, "Água Castello"|0|0|0|0
+Água mineral natural gaseificada, "Vimeiro"|0|0|0|0
+Água mineral natural gasocarbónica, "Pedras Salgadas"|0|0|0|0
+Água mineral natural, "Luso"|0|0|0|0
+Água, rede pública de abastecimento (Lisboa)|0|0|0|0
+Aguardente|308|0|0|0
+Aipo cru|15|1.1|1.5|0.1
+Alcachofra cozida|46|3|5.3|0.2
+Alcachofra crua|51|3|6.8|0.2
+Alcaparras (picles)|44|2.4|4.9|0.9
+Alecrim fresco|115|1.4|13.5|4.4
+Alecrim seco|377|4.9|46.4|15.2
+Alface|12|0.9|1.5|0
+Alface roxa|12|0.9|1.5|0
+Algas nori|256|30.8|9.2|2.6
+Alheira cozida|269|8.3|26.8|14
+Alheira crua|309|8.3|27.4|18.1
+Alheira grelhada|302|8.1|28.5|17
+Alho-francês cru|26|1.8|2.9|0.3
+Alho cru|72|3.8|11.3|0.6
+Alho em pó|310|17.6|52.3|1.2
+Almôndegas de porco|234|8|29.2|8.9
+Almôndegas de vaca|252|17|6.4|17.4
+Almôndegas de vaca e porco|243|19.2|3.8|16.7
+Alperce|48|0.8|8.5|0.1
+Alperce seco|242|5.4|41.2|0.9
+Alperce, conserva em calda de açúcar|163|0.5|39.3|0.1
+Alternativa vegetal ao iogurte à base de coco, sem açúcar|89|0.7|6.6|6.5
+Alternativa vegetal ao iogurte à base de soja|59|3|5.9|2.4
+Amêijoa aberta ao natural sem sal|131|23.4|5.2|1.8
+Amêijoa crua|65|11.7|2.6|0.9
+Amêijoas à Bulhão Pato|89|12.8|3.2|2.5
+Ameixa branca|40|0.6|7.8|0.2
+Ameixa encarnada|41|0.8|7.4|0.2
+Ameixa rainha Cláudia|57|0.8|11.8|0.1
+Ameixa seca|198|2.9|37.8|0.3
+Ameixa, conserva em calda de açúcar|115|0.2|27.5|0.2
+Amêndoa, miolo, com pele|643|21.6|7.2|56
+Amêndoa, miolo, torrada, sem pele|650|21.6|7.1|56.8
+Amendoim, miolo|589|25.4|10.1|47.7
+Amendoim, miolo, torrado com sal|622|27.3|6|51
+Amendoim, miolo, torrado sem sal|622|27.3|6|51
+Amora silvestre|43|1.4|4.5|0.9
+Ananás|42|0.5|8.6|0
+Ananás desidratado|363|3.8|72.8|1.5
+Ananás, conserva em calda de açúcar|98|0.5|23.2|0
+Anchova, conserva em óleo, escorrido|191|25.2|0|10
+Anona|82|1.7|16.8|0.4
+Anona desidratada|351|7.2|71.6|1.7
+Arroz à valenciana|111|7.6|7.7|5.3
+Arroz agulha cru|347|6.7|78.1|0.4
+Arroz carolino branqueado cru|357|7.4|79.6|0.5
+Arroz cozido simples|125|2.5|28|0.2
+Arroz de bacalhau|90|3.1|15.3|1.6
+Arroz de bacalhau com margarina|91|5.4|12.2|2.1
+Arroz de cabidela|105|9.4|12.2|1.9
+Arroz de cenoura com azeite|127|1.8|19.9|4.2
+Arroz de ervilhas|85|2.3|18|0.2
+Arroz de feijão|139|3.1|20.8|4.4
+Arroz de frango|205|8.4|25.2|7.6
+Arroz de frango com feijão e chouriço|116|10.9|8.8|3.4
+Arroz de frango malandrinho à moda de Monção|132|10.5|9.3|5.8
+Arroz de gambas|94|6.9|8.8|3.4
+Arroz de lulas|66|4.8|6.7|2.1
+Arroz de manteiga|265|3.8|44.4|7.7
+Arroz de marisco|72|6.5|8.2|1.4
+Arroz de pato|115|10.8|8.4|4.2
+Arroz de peixe|125|7|15.5|3.7
+Arroz de peixe com ervilhas|110|4.9|19.8|0.8
+Arroz de polvo com azeite|127|10.2|10.9|4.6
+Arroz de polvo com tomate|128|5.7|10|7.1
+Arroz de polvo com tomate e vinho|90|6.5|6.9|3.6
+Arroz de tamboril|87|5.7|7.1|3.8
+Arroz de tamboril malandrinho|67|5.9|10|0.2
+Arroz de tomate com azeite|129|2|20.1|4.2
+Arroz de tomate com margarina|122|2|20.2|3.4
+Arroz de tomate malandrinho|132|1.9|16.8|6
+Arroz doce|233|4.4|45.2|3.8
+Arroz integral cru|351|8.6|71.6|2.5
+Atum conserva em óleo|214|24.3|0|13
+Atum de cebolada|135|9|2.6|9
+Atum fresco cru|138|30.7|0|1.7
+Atum fresco grelhado|166|28.4|0|5.8
+Atum fresco, bife estufado com azeite e vinho|196|23.1|0.2|10.1
+Avelã, miolo|689|14|6|66.3
+Azeite (4 marcas)|899|0|0|99.9
+Azeitona|164|1.3|0|16.8
+Bacalhau à Brás|164|9.5|8.3|10.1
+Bacalhau à Brás com azeite|195|8.7|6.5|14.7
+Bacalhau à Brás com azeite e azeitonas|93|8|6.5|3.6
+Bacalhau à Gomes de Sá|139|6.7|13.1|6.3
+Bacalhau à Gomes de Sá, com azeite|160|8.6|7.4|10.4
+Bacalhau assado no forno com azeite|136|20.8|0.8|4.9
+Bacalhau com natas|98|9|9.2|2.6
+Bacalhau com natas, com queijo ralado|167|5.3|7.6|12.6
+Bacalhau cozido|106|26.2|0|0.1
+Bacalhau fresco cozido|84|19.1|0|0.8
+Bacalhau fresco cru|76|17.8|0|0.5
+Bacalhau grelhado|123|30.2|0|0.2
+Bacalhau seco e salgado, demolhado cru|80|19|0|0.4
+Bacalhau, filetes fritos|194|19.2|5.1|10.7
+Bacalhau, ovas cruas|104|21.7|0|1.9
+Bacon|367|13.8|0|34.6
+Bacon, grelhado|372|22.2|0|31.5
+Bagas goji secas|303|11.2|51.8|2.8
+Banana|97|1.4|22.1|0
+Banha de porco|896|0|0|99.5
+Base em pó para bebida de ananás|369|0|89.5|0
+Base em pó para bebida de laranja|375|0|88.9|0
+Batata assada com pele, sem sal (só a polpa)|90|2.5|19.2|0
+Batata assada no forno|159|3.2|24.8|4.8
+Batata cozida|59|1.5|12.4|0
+Batata crua|90|2.5|19.2|0
+Batata doce assada|123|1|28.3|0
+Batata doce crua|123|1|28.3|0
+Batata estufada com cebola, azeite e óleo alimentar|97|2|14.5|3.1
+Batata frita caseira (em palitos)|227|3.7|27.6|10.8
+Batata frita, de pacote (em rodelas)|543|5.7|39|38.1
+Batata, fécula|345|0.5|85|0.3
+Bebida refrigerante, cola|32|0|7.9|0
+Bebida refrigerante, cola sem açúcar|0|0|0|0
+Bebida refrigerante, gasosa|28|0|7|0
+Bebida refrigerante, laranja|31|0|7.7|0
+Bebida vegetal à base de amêndoa (alternativa ao leite)|29|0.4|3.7|1.3
+Bebida vegetal à base de amêndoa, 0% açúcares (alternativa ao leite)|17|0.4|0.3|1.5
+Bebida vegetal à base de amêndoa, com aroma a chocolate (alternativa ao leite)|49|0.7|8.4|1.4
+Bebida vegetal à base de arroz (alternativa ao leite)|51|0.2|10.6|0.9
+Bebida vegetal à base de aveia (alternativa ao leite)|46|0.6|8.2|1.2
+Bebida vegetal à base de aveia, 0% de açúcar (alternativa ao leite)|36|0.2|6|1.2
+Bebida vegetal à base de aveia, com açúcares adicionados (alternativa ao leite)|59|0.7|6|3.3
+Bebida vegetal à base de soja (alternativa ao leite)|49|3|4.1|2.2
+Bebida vegetal à base de soja com açúcar, com cálcio, sal e aromas (alternativa ao leite)|42|3|3.3|1.6
+Bebida vegetal à base de soja com açúcar, sal e aromas (alternativa ao leite)|59|3|6.7|2.2
+Bebida vegetal à base de soja natural, sem açúcar e sem sal (alternativa ao leite)|37|3.1|1.3|2.2
+Beldroega crua|13|1|1|0
+Berbigão aberto ao natural sem sal|118|21|5.4|1.4
+Berbigão cru|59|10.5|2.7|0.7
+Beringela crua|21|1.1|2.4|0.2
+Beringela grelhada com azeite|99|2|4.3|7.1
+Besugo cru|102|19.5|0|2.7
+Beterraba (raiz) cozida sem sal|23|1|3.4|0
+Beterraba (raiz) crua|23|1|3.5|0
+Biscoitos caseiros|423|6.7|73.4|11
+Biscoitos limão|382|6.7|77.9|4.4
+Biscoitos, argolas|451|5.4|69.7|16.5
+Biscoitos, línguas de gato|377|5.2|84.1|1.8
+Biscoitos, línguas de veado|474|5.8|65.1|20.7
+Biscoitos, palitos la Reine|381|11.5|66.6|7.2
+Bola de Berlim sem creme|402|6.8|43.7|21.5
+Bolacha "Belga"|487|7.1|70.1|19.6
+Bolacha "Cream cracker"|442|10.8|61.6|16.2
+Bolacha "waffer" baunilha|564|3.2|55.3|36.4
+Bolacha água e sal|437|8.7|71|12.6
+Bolacha aveia|443|10|57.5|18.3
+Bolacha chocolate|510|6|67.3|23.4
+Bolacha integral (trigo)|450|8.8|65.6|15.6
+Bolacha manteiga|483|6.2|65.2|21.3
+Bolacha Maria|436|8.4|72|12.2
+Bolacha torrada|437|7.3|68.5|14.4
+Bolo-Rei|407|7.9|57.4|14.9
+Bolo de arroz|391|5.8|48.1|19.2
+Bolo de bolacha Maria|389|3.9|46.3|20.7
+Bolo de chocolate|463|7.4|47|26.4
+Bolo de coco|454|4.2|37.8|31
+Bolo ferradura|351|5.9|71.6|4.1
+Bolo inglês|380|5.1|57|13.9
+Borrego, perna no forno|168|21.9|0.4|7.6
+Borrego, perna ou costeleta assada com azeite e margarina|234|23.3|0|15.6
+Borrego, perna ou costeleta assada com margarina|224|23.3|0|14.5
+Borrego, perna ou costeleta assada com margarina, sem molho|166|24.5|0|7.6
+Borrego, perna ou costeleta assada sem molho|168|24.1|0|8
+Borrego, perna ou costeleta cozida|157|26.5|0|5.7
+Borrego, perna ou costeleta crua|124|19.7|0|5
+Borrego, perna ou costeleta estufada com azeite e margarina|183|16.2|1.6|12
+Borrego, perna ou costeleta estufada com margarina|175|16.2|1.6|11.1
+Borrego, perna ou costeleta estufada sem molho|185|25.5|0|9.2
+Borrego, perna ou costeleta grelhada|152|25.7|0|5.5
+Brandy|246|0|0|0
+Brócolos cozidos|29|2.9|2.2|0.3
+Brócolos crus|32|3.4|1.5|0.8
+Bulgur|344|12.1|65.6|1.9
+Búzio cru|82|17.8|2.3|0.2
+Cabrito, costeleta crua|120|23.9|0|2.7
+Cabrito, costeleta grelhada|151|30.9|0|3
+Cabrito, peito cru|116|20.5|0|3.8
+Cabrito, peito estufado com azeite e margarina|173|23.3|0.8|8.4
+Cabrito, peito estufado com azeite e óleo alimentar|176|23.3|0.7|8.8
+Cabrito, peito estufado com manteiga e óleo alimentar|173|23.3|0.8|8.4
+Cabrito, peito estufado com margarina e óleo alimentar|173|23.3|0.8|8.4
+Cabrito, peito estufado, sem molho|153|28.4|0|4.4
+Cabrito, peito grelhado|144|26.5|0|4.2
+Cabrito, perna assada com azeite e margarina|180|21.7|0.2|10
+Cabrito, perna assada com óleo alimentar e margarina|180|21.7|0.2|10
+Cabrito, perna assada, sem molho|135|24.3|0|4.2
+Cabrito, perna crua|113|19.3|0|4
+Cação cru|82|20|0|0.2
+Cação frito|170|24|2.7|7
+Cacau em pó|358|19.6|11.1|23.4
+Cachucho cru|80|18.3|0|0.7
+Café solúvel em pó|272|14.9|41.1|0.5
+Café solúvel, descafeinado, pó|274|14.7|42.6|0.2
+Café, infusão - bica|4|0.4|0.3|0.1
+Café, infusão - café de cafeteira|2|0.2|0.3|0
+Café, infusão - carioca|2|0.2|0.3|0
+Café, infusão - valor médio (bica 60% e café de cafeteira 40%)|3|0.3|0.3|0.1
+Caldeirada de bacalhau|67|4.2|7.1|2.1
+Caldeirada de bacalhau com enchidos e massa|146|7|9.7|8.5
+Caldeirada de cabrito com azeite e banha|119|11.3|8.3|4.3
+Caldeirada de cabrito com azeite e margarina|116|11.3|8.3|4
+Caldeirada de enguias|171|6.6|8.2|11.9
+Caldeirada de enguias à moda de Aveiro|245|7.4|5.3|21.4
+Caldeirada de pargo e peixe-espada-preto|138|7.2|4.4|9.8
+Caldeirada de peixe|84|7.5|4.4|3.5
+Caldeirada de safio|81|4.5|7.2|3.1
+Caldeirada de safio com amêijoas|80|6.9|5.8|2.7
+Caldeirada de safio, raia e tamboril|98|7|9.8|2.9
+Caldo preparado com cubo de carne de galinha (diluição 2%)|5|0.3|0.2|0.3
+Caldo preparado com cubo de carne de vaca (diluição 2%)|4|0.4|0.2|0.2
+Camarão cozido|99|22.6|0.4|0.8
+Camarão cozido sem sal|92|20.2|0.3|1.1
+Camarão cru|77|17.6|0.3|0.6
+Canela moída|315|3.9|55.5|3.2
+Canja de frango com aipo|56|7.8|2.3|1.7
+Canja de frango com massa|61|10.8|2.1|1
+Canónigos crus|24|2|2|0.4
+Cantarilho (Redfish) assado com cebola, tomate, azeite e bacon|142|13.6|1.2|8.6
+Cantarilho (Redfish) com batata, no forno|108|8.7|5.7|4.9
+Cantarilho (Redfish) cozido|99|19.3|0|2.4
+Cantarilho (Redfish) cru|101|18.6|0|2.9
+Cantarilho (Redfish) no forno|114|17.3|1.1|2.7
+Caracol riscado, cozido|89|10|3.5|3.9
+Caracol, cru|85|16.1|2|1.4
+Carambola|40|0.5|7.1|0.3
+Carapau cru|105|19.7|0|2.9
+Carapau frito|186|24|1|9.6
+Carapau grelhado|139|26.3|0|3.7
+Cardamomo verde|335|10.8|49.5|6.2
+Caril em pó|342|12.7|25.2|13.8
+Carne à bolonhesa|238|11.5|15.6|14
+Carne à jardineira|140|9.7|5.6|8.1
+Carne de porco à alentejana|229|14.6|1.8|16.9
+Carne de porco à alentejana sem massa de pimentão|183|16|2.2|11.8
+Carneiro, costeleta crua|151|20.8|0|7.5
+Carneiro, pá assada com azeite e margarina|319|24.3|0|24.6
+Carneiro, pá assada com margarina|310|24.3|0|23.6
+Carneiro, pá assada, sem molho|202|25.1|0|11.3
+Carneiro, pá cozida|238|27.6|0|14.2
+Carneiro, pá crua|195|20.5|0|12.6
+Carneiro, pá estufada sem molho|238|27.6|0|14.2
+Carneiro, peito gordo, cozido|333|23.3|0|26.6
+Carneiro, peito gordo, cru|396|16.8|0|36.5
+Carneiro, perna gorda, assada, sem molho|285|24.3|0|20.9
+Carneiro, perna gorda, crua|276|19.1|0|22.2
+Carneiro, perna gorda, estufada sem molho|339|26.5|0|25.9
+Carneiro, perna magra assada com azeite e margarina|242|23.5|0|16.4
+Carneiro, perna magra assada com margarina|232|23.5|0|15.3
+Carneiro, perna magra, assada, sem molho|178|24.2|0|9
+Carneiro, perna magra, crua|130|19.8|0|5.6
+Carneiro, perna magra, estufada com azeite e margarina|201|17.4|1.7|13.4
+Carneiro, perna magra, estufada com margarina|193|17.4|1.7|12.5
+Carneiro, perna magra, estufada sem molho|195|25.6|0|10.3
+Carneiro, perna ou costeleta magra frita com margarina, sem molho|174|24.7|0|8.4
+Carneiro, rim cru|92|16.2|0|3
+Carneiro, rim frito com margarina|205|22.3|0|12.9
+Caseína|358|86.2|0|1.5
+Castanha assada com sal|222|3.5|45.5|1.3
+Castanha cozida sem sal|175|2.8|35.9|1
+Castanha de caju torrada e salgada|613|19.6|19.4|50
+Castanha de caju torrada, sem sal|613|19.6|19.4|50
+Castanha do Brasil|690|9.6|2.6|66.7
+Castanha pilada|341|5.1|70|2
+Castanha, miolo|194|3.1|39.8|1.1
+Cavala cozida|192|20.5|0|12.2
+Cavala crua|202|20.3|0|13.4
+Cavala em filetes, conserva em azeite|182|24|0|9.6
+Cavala grelhada|192|18.5|0.6|12.2
+Cavala no forno|192|12.9|2.3|14.3
+Cavalo, bife de alcatra crua|116|21.1|0|3.5
+Cavalo, bife de alcatra frita com manteiga|177|23.3|0|9.3
+Cavalo, bife de alcatra frita com margarina|176|23.3|0|9.2
+Cavalo, bife de alcatra frita, sem molho|147|24.7|0|5.4
+Cavalo, lombo ou pá assado com azeite e manteiga|167|22.7|0.1|8
+Cavalo, lombo ou pá assado com margarina|161|22.7|0.1|7.3
+Cavalo, lombo ou pá assado sem molho|136|24.2|0|4.3
+Cavalo, lombo ou pá cru|99|19.6|0|2.3
+Cavalo, lombo ou pá frito com manteiga|158|21.6|0|8
+Cavalo, lombo ou pá frito com margarina|157|21.6|0|7.8
+Cebola cozida|18|1|2.4|0.2
+Cebola crua|20|0.9|3.1|0.2
+Cebola doce, crua|25|0.8|4.9|0
+Cebola frita com óleo alimentar|138|1.9|6.2|11.2
+Cebola roxa, crua|43|0.7|8.6|0
+Cebolinho fresco|28|2.8|1.7|0.6
+Cenoura baby crua|29|0.6|4.9|0.1
+Cenoura cozida|33|0.9|5.7|0
+Cenoura crua|25|0.6|4.4|0
+Cereal de pequeno almoço à base de farelo de trigo (tipo "All-Bran")|310|15.1|39.8|3.4
+Cereal de pequeno almoço de trigo integral tipo "Weetabix"|364|10.7|71.5|2
+Cerefólio fresco|80|4|12|1
+Cereja (4 variedades)|67|0.8|13.3|0.7
+Cereja desidratada|366|4.4|72.6|3.8
+Cereja, conserva em calda de açúcar|120|0.4|28.7|0.2
+Cereja, cristalizada|326|0.4|79.9|0.2
+Cerveja branca|30|0.4|0.5|0
+Cerveja preta|23|0.5|0.6|0
+Cerveja sem álcool|7|0.3|1.5|0
+Chá, infusão, preto|1|0.1|0.2|0
+Chá, infusão, verde|1|0.1|0.2|0
+Chamuça|344|9.1|39.3|16.3
+Cherne cozido|124|18.9|0|5.4
+Cherne cru|132|17.9|0|6.7
+Cherne grelhado|153|24.1|0|6.3
+Chicharro cozido|111|21.1|0|3
+Chicharro cru|105|19.7|0|2.9
+Chicharro grelhado|139|26.3|0|3.7
+Chicória crua|14|1|0.9|0.1
+Choco cru|79|18.9|0|0.4
+Choco grelhado|109|25.8|0|0.6
+Chocolate culinária, tablete|502|5.4|44|30.5
+Chocolate de leite, tablete|552|8|53.1|33.9
+Chocolate negro (aproximadamente 50% cacau)|530|5.2|52.6|31.7
+Chocolate, pó|469|4.2|63.8|20.3
+Chouriço de carne de porco, cru|476|20|0|44.1
+Chouriço de carne de porco, gordo, cru|544|15.4|0|53.6
+Chouriço de carne de porco, magro, cozido sem adição de sal|334|24.8|0|26.1
+Chouriço de carne de porco, magro, cru|409|24.5|0|34.5
+Chouriço de carne de porco, magro, grelhado|343|31.6|0|24.1
+Chouriço de sangue cozido|263|11.2|0|24.2
+Chouriço de sangue, cru|328|11|0|31.6
+Chuchu|19|0.8|2.9|0.1
+Chucrute|15|1.3|1.1|0.3
+Clara de ovo de galinha, crua|47|11|0|0.3
+Clara de ovo de galinha, pasteurizada|46|10.5|1|0
+Clementina|53|0.8|11.1|0.2
+Coco seco, ralado|648|5.6|6.4|62
+Codorniz carne sem pele, crua|119|22.1|0|3.4
+Codorniz com pele, crua|170|21.5|0|9.3
+Codorniz com pele, estufada com azeite|234|25.6|0.7|13.4
+Codorniz com pele, grelhada|202|24.5|0|11.6
+Coelho à caçador|182|12.3|1.6|12.7
+Coelho cru|117|20.3|0|4
+Coelho em vinha de alhos|174|11.3|1.4|11.6
+Coelho estufado|211|26.6|0.9|10.2
+Coelho estufado com azeite|218|26.6|0.9|11
+Coelho estufado com margarina|205|26.6|0.9|9.5
+Coentros crus|28|2.4|1.8|0.6
+Cogumelos enlatados, escorridos|17|2.1|0|0.4
+Cogumelos fritos com óleo alimentar|163|2.4|0.3|16.2
+Cogumelos marron|23|3.2|1.5|0.2
+Cogumelos ostra (pleurotus)|27|2.4|2.7|0.2
+Cogumelos, genérico|18|1.8|0.5|0.5
+Colorau|358|14.8|35|13
+Cominhos|427|18|34|22
+Compota de alperce|239|0.4|58.9|0
+Compota de ameixa|200|0.3|49.2|0
+Compota de ananás|211|0.5|50.8|0.1
+Compota de cereja|251|0.4|61.9|0
+Compota de laranja|242|0.4|59.5|0
+Condimento de mostarda|158|5.7|18.5|6.4
+Corvina cozida|95|20.7|0|1.4
+Corvina crua|94|20.4|0|1.4
+Couve-branca cozida|17|0.7|1.7|0.4
+Couve-branca crua|28|1.4|3.5|0.4
+Couve-de-Bruxelas cozida|34|1.1|3.5|1.3
+Couve-de-Bruxelas crua|50|3.5|4|1.4
+Couve-flor cozida|21|1.6|2|0.3
+Couve-flor crua|34|3.7|3.3|0.2
+Couve-galega cozida|29|2.1|2.9|0.4
+Couve-galega crua|32|2.4|3.1|0.4
+Couve-lombarda cozida|22|2.2|1.4|0.2
+Couve-lombarda crua|26|2.4|2.1|0.2
+Couve-portuguesa cozida|25|1.6|2.5|0.4
+Couve-portuguesa crua|31|2.2|3.5|0.4
+Couve-roxa crua|30|2|3.9|0
+Cozido à portuguesa|120|6.8|6.2|7
+Cozido à portuguesa com grão|259|11.7|20.5|13.5
+Cravinho|431|6|52|20
+Creme culinário|531|0|0|59
+Creme culinário líquido, 65% gordura, com sal|588|0|0|65.3
+Creme de camarão|39|3.6|1.7|1.4
+Creme de camarão com natas|51|3.5|1.9|2.9
+Creme de ervilhas|43|2.6|3|1.9
+Creme para barrar de cacau e avelãs|545|5.9|54.7|33.3
+Creme vegetal culinário, 75% gordura, sem sal|677|0.1|0.4|75
+Creme vegetal de soja para barrar|444|0.2|3.7|47.6
+Creme vegetal de soja para culinária (alternativa à nata)|162|2.3|5.7|14.3
+Creme vegetal para barrar  72% gordura, 33% ácidos gordos polinsaturados|651|0.1|0.4|72.1
+Creme vegetal para barrar 35% gordura, com fitosteróis|328|0.1|3.2|35
+Creme vegetal para barrar 37% gordura|343|1.4|0.2|37.4
+Creme vegetal para barrar 58% gordura, com cálcio|525|0.3|0.5|58
+Creme vegetal para barrar 70% gordura, 53% ácidos gordos monoinsaturados|632|0.1|0.5|70
+Creme vegetal para barrar 70% gordura, com sal|632|0.1|0.3|70
+Croissant|418|7.5|44.6|22.8
+Croquete|316|13.2|23.1|18.8
+Cubo de carne de galinha para caldo|236|15.4|9|15.4
+Cubo de carne de vaca para caldo|183|19.8|8|8
+Curgete crua|19|1.6|2|0.3
+Curgete frita com óleo alimentar|64|2|2.5|4.8
+Dióspiro|65|0.6|14.8|0
+Dióspiro desidratado|353|3.3|80.8|0
+Doce de alperce|233|0.5|57.4|0
+Doce de cereja|262|0.2|64.9|0
+Doce de framboesa|242|0.4|59.7|0
+Doce de ginja|263|0.4|64.8|0
+Doce de maçã|239|0.2|59|0
+Doce de morango|245|0.2|60.5|0
+Doce de pêssego|209|0.4|51.3|0
+Donut|400|6.6|43|21.7
+Donut recheado com doce de fruta|348|6|47|14.5
+Dourada cozida|196|20.8|0|12.5
+Dourada crua|167|19.7|0|9.8
+Dourada grelhada|178|22.3|0|9.9
+Éclair de chocolate|378|4.1|36.5|23.8
+Empada|374|9.6|33.9|21.9
+Empadão de atum|234|12.9|10.7|15.2
+Empadão de bacalhau|118|6.9|10.9|5
+Empadão de carne com manteiga|134|6.6|10.7|6.3
+Empadão de carne com margarina|134|6.6|10.7|6.3
+Empadão de carne guisada|167|9.4|10.9|9.3
+Empadão de pescada e camarão|122|8.7|11|4.5
+Endívia crua|19|1.8|1.2|0.4
+Enguia crua|303|13.4|0|27.7
+Enguia frita|267|14.8|3.2|21.6
+Ervilhas secas cozidas|114|6.9|18.1|0.4
+Ervilhas secas cruas|330|22.7|49.4|1.3
+Ervilhas, grão, congeladas cozidas|72|5.6|7.5|0.5
+Ervilhas, grão, congeladas cruas|68|5.3|7|0.5
+Ervilhas, grão, frescas cozidas|72|6.2|7.9|0.7
+Ervilhas, grão, frescas cruas|76|6.4|8.6|0.7
+Ervilhas, grão, frescas, estufadas|113|5.1|9.6|5.1
+Ervilhas, vagens cozidas|30|2.8|3.5|0.2
+Ervilhas, vagens cruas|33|3.1|3.9|0.2
+Espadarte cru|97|17.8|0|2.9
+Espadarte grelhado|116|21.3|0|3.4
+Espadarte, bife estufado com azeite e vinho|152|17.1|0.4|8.1
+Espargos cozidos|16|1|2.2|0
+Espargos crus|22|2.1|2.7|0
+Esparguete cozido|102|3.4|19.9|0.6
+Esparguete cru|360|12.1|71.1|1.9
+Esparguete estufado com cenoura e azeite|121|3|17.6|3.9
+Esparguete estufado com cenoura e margarina|115|3|17.6|3.2
+Espinafres crus|27|2.6|0.8|0.9
+Estragão fresco|55|3.4|6.3|1.1
+Estragão seco|363|22.8|42.8|7.2
+Faneca crua|82|19|0.1|0.6
+Farelo de trigo|293|16.2|24.9|5.3
+Farinha de alfarroba|368|3.2|85.6|0.3
+Farinha de aveia|363|14.5|57|7.3
+Farinha de centeio|370|7.8|77.3|1.2
+Farinha de centeio tipo 70|364|6.6|78.5|1.1
+Farinha de centeio tipo 85|375|9|76|1.3
+Farinha de cevada|330|8.8|64.4|2.5
+Farinha de espelta|339|14|61.8|2.3
+Farinha de milho tipo 70|359|8.3|75.3|2.2
+Farinha de pau (mandioca)|350|1.4|84.6|0.3
+Farinha de trigo (valor médio tipo 150 e tipo 55)|349|8.5|73.7|1.5
+Farinha de trigo com fermento|343|9.7|72.5|1.1
+Farinha de trigo integral|338|9.6|65.2|2.4
+Farinha de trigo tipo 150|352|9.1|73|1.8
+Farinha de trigo tipo 55|344|7.8|74.3|1.1
+Farinha de trigo tipo 65|341|13.6|67.6|1
+Farinha láctea 5 frutos tipo "Cerelac" (com farinha de trigo)|408|15|65|9
+Farinha láctea maçãs tipo "Cerelac" (com farinha de trigo)|412|15|66|9
+Farinha láctea tipo "Cerelac" (com farinha de trigo)|416|15|68|9
+Farinheira cozida|404|4.8|26.4|30.7
+Farinheira crua|497|4.8|26.7|41
+Favada à portuguesa|130|8|8.4|5.9
+Favas frescas cozidas|82|7.7|7.7|0.5
+Favas frescas cruas|80|7.4|8.5|0.5
+Favas secas cruas|301|25.8|32.8|1.3
+Favas secas, demolhadas, cozidas|90|7.9|10.7|0.6
+Feijão-verde fresco cozido|27|1.3|3.5|0.3
+Feijão-verde fresco cru|32|1.9|3.8|0.3
+Feijão branco, demolhado, cozido|102|6.5|14.6|0.6
+Feijão branco, seco, cru|308|21.3|43.9|0.1
+Feijão catarino, seco, cru|302|20.3|47.9|0.1
+Feijão catarino, seco, demolhado, cozido|88|6|14.1|0
+Feijão encarnado, seco, cru|310|21.5|47.9|0.5
+Feijão encarnado, seco, demolhado, cozido|90|6.2|13.8|0.1
+Feijão frade, seco, cru|339|21.4|55.3|1.5
+Feijão frade, seco, demolhado, cozido|123|8.8|18.1|0.7
+Feijão manteiga, demolhado, cozido|99|6.4|14|0.6
+Feijão manteiga, seco, cru|313|24|42.6|0.1
+Feijão preto, seco, cru|318|22.4|47.9|1
+Feijão preto, seco, demolhado, cozido|80|6.5|8.4|0.3
+Feijoa (polpa)|52|0.9|9.8|0.5
+Feijoada com carne de porco|187|13.6|13.3|7.2
+Feijoada com carne de porco e de vaca|191|13.7|13.3|7.5
+Feijoada com enchidos e ovos|240|9|14.1|15.1
+Fermento em pó|156|4.7|34.4|0
+Fermento fresco de padeiro|78|12.9|1|0.9
+Fermento seco de padeiro|228|38.3|3.2|2.5
+Fiambre de aves|83|13.8|2.7|1.6
+Fiambre de porco|111|15.3|1.3|4.6
+Fiambre, pá|112|14|1.3|5.1
+Fiambre, peito de frango|82|13.7|2.8|1.3
+Fiambre, peito de peru|85|13.8|2.6|1.9
+Fiambre, perna|111|16.5|1.2|4.1
+Figo (5 variedades)|79|0.9|16.3|0.5
+Figo cristalizado|295|0.5|71.2|0.4
+Figo seco|276|2.8|58.2|1.5
+Fisális|68|1.8|11.7|0.6
+Flocos de arroz|379|7|83.4|1.5
+Flocos de aveia|366|13.5|61.7|5.8
+Flocos de centeio|352|12|69|2
+Flocos de cereais e frutos secos tipo "Muesli"|388|10.4|69.1|6.3
+Flocos de cevada|324|8.3|64.4|2
+Flocos de milho tipo "Corn Flakes"|374|7.9|81.1|1.1
+Flocos de trigo|373|14|69|2.5
+Flocos de trigo com figos tipo "Nestum"|370|9|76.3|1.5
+Flocos de trigo com mel tipo "Nestum"|385|8.2|84.6|1
+Flocos de trigo e arroz enriquecidos com vitaminas, cálcio e ferro|372|7.5|79.2|1.3
+Flocos de trigo integral tipo "All-Bran Flakes"|349|10.2|64.2|1.9
+Flor de sal|0|0|0|0
+Folhas de rabanete cruas|39|3.5|3.9|0.5
+Framboesa|49|0.9|5.1|0.6
+Framboesa desidratada|293|5.4|30.9|3.6
+Francesinha, com molho|249|13.3|6.5|17.7
+Frango (1/4) peito e asa com pele, cozidos|202|27.2|0|10.3
+Frango (1/4) peito e asa com pele, estufados com azeite e margarina|204|18.5|1.7|13.5
+Frango (1/4) peito e asa com pele, estufados com margarina|201|18.5|1.7|13.2
+Frango (1/4) peito e asa com pele, estufados sem molho|223|29.2|0|11.8
+Frango (1/4) peito e asa com pele, grelhados|235|28.7|0|13.4
+Frango (1/4) perna com costa e pele, assada sem molho|231|26.9|0|13.7
+Frango (1/4) perna com costa e pele, cozida|197|25.5|0|10.6
+Frango (1/4) perna com costa e pele, estufada com azeite e margarina|203|17.3|1.7|13.8
+Frango (1/4) perna com costa e pele, estufada com margarina|200|17.3|1.7|13.5
+Frango (1/4) perna com costa e pele, estufada sem molho|215|26.9|0|11.9
+Frango (1/4), peito e asa com pele, crus|196|20.4|0|12.7
+Frango (1/4), perna com costa e pele, crua|195|19.1|0|13
+Frango (1/4), perna com costa e pele, grelhada|231|26.9|0|13.7
+Frango inteiro com pele, assado sem molho|239|27.6|0|14.3
+Frango inteiro com pele, cozido|204|26.1|0|11.1
+Frango inteiro com pele, cru|201|19.6|0|13.6
+Frango inteiro com pele, estufado com azeite e margarina|224|19.1|1.8|15.4
+Frango inteiro com pele, estufado com margarina|221|19.1|1.8|15.1
+Frango inteiro com pele, estufado sem molho|233|28.8|0|13.1
+Frango inteiro com pele, grelhado|239|27.6|0|14.3
+Frango inteiro sem pele, cozido|169|32.8|0|4.2
+Frango inteiro sem pele, cru|110|22.9|0|2
+Frango inteiro sem pele, estufado com azeite e margarina|129|21|1.7|4.1
+Frango inteiro sem pele, estufado com margarina|126|21|1.7|3.8
+Frango inteiro sem pele, estufado sem molho|185|33.2|0|5.8
+Frango inteiro sem pele, grelhado|168|31|0|4.9
+Frango, peito com pele estufado com azeite e margarina|189|22.1|1.7|10.3
+Frango, peito com pele estufado com margarina|187|22.1|1.7|10
+Frango, peito com pele, cozido|194|32.1|0|7.3
+Frango, peito com pele, cru|177|24.1|0|8.9
+Frango, peito com pele, estufado sem molho|212|34.4|0|8.3
+Frango, peito sem pele estufado com azeite e margarina|124|21.4|1.7|3.3
+Frango, peito sem pele estufado com margarina|121|21.4|1.7|3
+Frango, peito sem pele, cozido|148|34.5|0|1.1
+Frango, peito sem pele, cru|108|24.1|0|1.2
+Frango, peito sem pele, estufado sem molho|169|36.6|0|2.5
+Frango, pele crua|474|9.7|0|48.3
+Frango, perna sem pele, cozida|147|31.5|0|2.3
+Frango, perna sem pele, crua|111|22|0|2.6
+Frango, perna sem pele, estufada com azeite e margarina|124|19.1|1.6|4.4
+Frango, perna sem pele, estufada com margarina|121|19.1|1.6|4.1
+Frango, perna sem pele, estufada sem molho|180|32.9|0|5.4
+Funcho fresco|32|2.8|2.6|0.4
+Galinha de angola com pele, crua|152|23.4|0|6.5
+Galinha, coração cru|149|15.6|0.7|9.3
+Galinha, fígado cru|92|17.7|0|2.3
+Gamba crua|88|21.5|0|0.2
+Garoupa cozida|101|20.8|0|2
+Garoupa crua|95|20.5|0|1.4
+Garoupa grelhada|121|25.9|0|1.9
+Gelado caseiro com bolachas e natas|358|5.1|36.5|21.2
+Gelado caseiro com palitos la Reine|263|7.9|28.7|12.4
+Gelado de água (sorvete)|132|0.4|32.6|0
+Gelado de leite|199|3.6|21.7|10.9
+Gelatina desidratada (pó ou folha)|349|87|0|0.1
+Gelatina preparada com ananás em conserva|97|2.2|21.6|0
+Gelatina preparada com laranja e sumo de laranja|84|2.6|17.4|0.1
+Geleia de casca de laranja|275|0.3|68|0
+Gema de ovo de galinha, crua|342|16|0|30.9
+Gema de ovo de galinha, pasteurizada|294|15.3|1.3|25.2
+Gengibre fresco|82|1.8|15.8|0.8
+Gérmen de trigo|391|28.1|41.8|9.6
+Gin - Rum- Whisky|222|0|0|0
+Ginja|57|0.9|11.5|0.3
+Goiaba crua, polpa|41|0.8|5|0.5
+Goraz assado com cebola, tomate, azeite e óleo alimentar|117|14.8|1.5|5.1
+Goraz cozido|108|19.2|0|3.5
+Goraz cru|100|18.8|0|2.7
+Goraz grelhado|118|22.4|0|3.2
+Goraz no forno|110|18.7|0.7|2.7
+Grão-de-bico, demolhado, cozido|119|6.8|15.1|2.1
+Grão-de-bico, seco, cru|327|19.4|33.5|6.8
+Grelos de couve cozidos|22|1.9|1.5|0.4
+Grelos de couve crus|28|2.4|2.5|0.4
+Grelos de nabo cozidos|20|1.8|1.3|0.4
+Grelos de nabo crus|29|2.4|2.3|0.5
+Gressino|396|10.7|67|8.7
+Grilo doméstico, pó|506|58.3|0.1|28.9
+Groselha|52|1.1|5|0.5
+Hambúrguer de feijão manteiga frito com azeite|169|8|19.8|5.3
+Hambúrguer de feijão manteiga frito com óleo de milho|169|8|19.8|5.3
+Hortelã fresca|51|3.8|5.3|0.7
+Imperador assado com cebola, tomate, azeite e óleo alimentar|94|13.7|1.4|3.1
+Imperador cozido|84|19.9|0|0.5
+Imperador cru|80|19|0|0.4
+Imperador grelhado|97|23|0|0.5
+Inhame cru|114|1.5|25.7|0.3
+Iogurte gordo, aromatizado, açucarado|83|3.9|8.5|3.6
+Iogurte gordo, com polpa e/ou pedaços de fruta e cereais açucarado|114|4.2|15.8|3.2
+Iogurte gordo, com polpa e/ou pedaços de fruta, açucarado|96|4.2|12.4|3.2
+Iogurte grego com fruta açucarado|113|2.7|13.7|5
+Iogurte grego magro natural|56|5.3|3.9|2
+Iogurte grego natural|85|1.4|4.8|6.6
+Iogurte líquido magro, aromatizado, açucarado|62|3.2|11.6|0.3
+Iogurte líquido meio gordo, aromatizado, açucarado|70|3|11.5|1.3
+Iogurte líquido meio gordo, natural, açucarado|70|3.1|11.2|1.4
+Iogurte magro, aromatizado, açucarado|69|5|11.8|0.1
+Iogurte magro, com cereais e edulcorantes|50|4.3|5.7|0.4
+Iogurte magro, natural|42|4.6|5.2|0.2
+Iogurte magro, natural, com edulcorantes|47|5|6.3|0.1
+Iogurte meio gordo, aromatizado, açucarado|79|4.3|11.3|1.8
+Iogurte meio gordo, com polpa e/ou pedaços de fruta, açucarado|92|4.3|14.6|1.7
+Iogurte meio gordo, natural|54|4.2|5|1.8
+Iogurte meio gordo, natural, açucarado|91|4.7|13.1|2.1
+Iogurte sem lactose enriquecido em proteína, magro, aromatizado, com pedaços e/ou polpa de fruta, açucarado|76|9|9.7|0
+Iogurte sem lactose líquido, magro, aromatizado, com polpa de fruta, açucarado|78|3.1|16|0.2
+Iogurte sem lactose líquido, magro, aromatizado, com polpa de fruta, com edulcorantes|34|3.3|5|0.1
+Iogurte sem lactose líquido, meio gordo, aromatizado, açucarado|71|2.8|11.8|1.4
+Iogurte sem lactose líquido, meio gordo, aromatizado, com polpa de fruta, açucarado|73|2.6|12.5|1.3
+Iogurte sem lactose líquido, meio gordo, natural, açucarado|70|2.7|11.7|1.4
+Iogurte sem lactose magro, aromatizado, com pedaços e/ou polpa de fruta, com edulcorantes|42|4.8|4.8|0.1
+Iogurte sem lactose magro, natural|41|4.9|5|0.2
+Iogurte sem lactose meio gordo, aromatizado, açucarado|76|3.5|12|1.5
+Iogurte sem lactose meio gordo, aromatizado, com frutos secos e cereais, açucarado|98|3.7|16.1|1.6
+Iogurte sem lactose meio gordo, aromatizado, com pedaços e/ou polpa de fruta, açucarado|83|3.7|13.6|1.3
+Iogurte sem lactose meio gordo, natural|48|3.8|4.5|1.5
+Iogurte sem lactose meio gordo, natural, açucarado|78|3.5|12.2|1.5
+Javali cru|108|19.5|0|3.4
+Jesuíta|518|4.1|54|31.2
+Kefir de cabra, magro, natural, sólido|36|4.3|3.9|0.4
+Kefir de cabra, natural, sólido|68|3.3|3.9|4.3
+Kefir, magro, natural, sólido|30|3.4|3.6|0.1
+Kefir, natural, liquido|62|3.3|4.4|3.3
+Kefir, natural, sólido|65|4.1|3.9|3.5
+Kefir, parcialmente desnatado, açucarado, aromatizado, liquido|69|3.3|10|1.6
+Kefir, parcialmente desnatado, aromatizado, liquido|46|3.5|4.6|1.4
+Kefir, parcialmente desnatado, natural, liquido|45|3.5|4.1|1.5
+Lagosta cozida|90|20.6|0.2|0.8
+Lagosta crua|79|18.2|0.1|0.7
+Lagostim cozido|90|21.2|0.2|0.5
+Lagostim cru|89|20.9|0.2|0.5
+Lampreia crua|314|16.7|0.1|27.4
+Lapas cruas|66|14.3|0.6|0.7
+Laranja (3 variedades)|52|0.9|10.5|0.1
+Larvas de Tenebrio molitor, desidratadas|500|52.7|3.1|29.3
+Lasanha à bolonhesa|183|7.7|9.2|12.4
+Lebre crua|113|21.6|0|3
+Leite achocolatado, sem lactose|58|3.5|7.5|1.4
+Leite achocolatado, UHT|65|3.4|9.7|1.3
+Leite condensado|338|7.8|56.4|9
+Leite creme|163|5.9|19.5|6.8
+Leite de cabra cru|70|3.8|4.6|4
+Leite de coco, enlatado|185|2|2.8|18.4
+Leite de ovelha cru|93|5.1|4.2|6.2
+Leite evaporado|136|6.6|9.8|7.8
+Leite fermentado (Bifidus) gordo, natural|67|4|4.5|3.6
+Leite fermentado (Bifidus) sem lactose enriquecido com fibra, magro, aromatizado, com pedaços e/ou polpa de fruta, com sementes e/ou cereais, com frutos secos e/ou de casca rija, com edulcorantes|57|4.2|6.6|0.8
+Leite fermentado (Bifidus) sem lactose líquido, meio gordo, aromatizado, com pedaços e/ou polpa de fruta, açucarado|71|2.7|11|1.7
+Leite fermentado (Bifidus) sem lactose magro, natural, com edulcorantes|51|5.3|6.2|0.4
+Leite fermentado (Bifidus) sem lactose, gordo, natural|70|4.2|4.8|3.7
+Leite fermentado (Bifidus) sem lactose, magro, aromatizado, com pedaços e/ou polpa de fruta e/ou hortícolas, açucarado, com edulcorantes|57|4.9|8.2|0.4
+Leite gordo especial, pasteurizado|62|3.1|4.8|3.4
+Leite gordo sem lactose, enriquecido com vitaminas A, D, E e B9 (ácido fólico), UHT|62|3|4.6|3.5
+Leite gordo, pasteurizado|62|3|4.7|3.5
+Leite gordo, pó|495|26.8|38.7|25.9
+Leite gordo, UHT|62|3|4.7|3.5
+Leite humano|66|1.4|7.5|3.4
+Leite humano, colostro|60|2.3|6.3|2.8
+Leite humano, transição|66|1.6|6.6|3.7
+Leite magro de pastagem, UHT|33|3.1|4.9|0.1
+Leite magro sem lactose, enriquecido com proteína, aromatizado, UHT|55|8|5|0.2
+Leite magro sem lactose, UHT|36|3.4|5.1|0.2
+Leite magro, pó|359|35.1|52.7|0.9
+Leite magro, UHT|35|3.4|4.9|0.2
+Leite meio gordo de pastagem, UHT|46|3|5|1.5
+Leite meio gordo sem lactose, UHT|48|3.3|5.1|1.6
+Leite meio gordo, pó|427|30.7|45.6|13.5
+Leite meio gordo, UHT|47|3.3|4.9|1.6
+Lentilhas vermelhas, secas, cruas|327|25.7|46.6|0.3
+Lentilhas, secas, cruas|321|25.2|47.6|0.7
+Lentilhas, secas, demolhadas, cozidas|115|9.1|16.7|0.3
+Lichia fresca|70|0.9|14.8|0.4
+Licor beneditino|352|0|34.8|0
+Licor de anis|385|0|36|0
+Licor de ginja|239|0.1|19|0
+Licor simples|294|0|24.4|0
+Lima|31|0.7|1.7|0.2
+Limão|31|0.5|1.9|0.3
+Linguado cru|82|20.1|0|0.2
+Linguado frito|164|24.3|2.7|6.2
+Linguado grelhado|94|23.1|0|0.2
+Linguiça|437|21.5|0|39
+Lula crua|71|15.8|0|0.9
+Lula estufada com cebola, tomate e azeite|135|16.1|2.9|6.3
+Lula grelhada|144|32.5|0|1.6
+Maçã (média com e sem casca)|57|0|12.2|0.5
+Maçã assada com açúcar|106|0.2|23.9|0.5
+Maçã assada sem açúcar|75|0.3|15.7|0.5
+Maçã com casca|64|0.2|13.4|0.5
+Maçã cozida com açúcar|77|0.2|17|0.5
+Maçã cozida sem açúcar|51|0.2|10.5|0.5
+Maçã desidratada|354|1.1|74.5|2.9
+Maçã seca|257|0.8|57.1|0.3
+Maçã sem casca|61|0.2|12.7|0.5
+Madalena|443|4.9|54.7|22.6
+Maionese caseira, com ovo e azeite|657|4|0|71.2
+Maionese caseira, com ovo e óleo de soja|644|3.9|0|69.8
+Malagueta vermelha fresca|31|1.8|4.3|0.3
+Malagueta vermelha, desidratada|317|10.6|41.2|5.8
+Mandioca crua|145|1|33.8|0.3
+Manga|59|0.5|11.7|0.3
+Manga desidratada|340|2.9|67.4|1.7
+Manjericão fresco|48|3.1|5.1|0.8
+Manjericão seco|244|23|10|4.1
+Manjerona seca|320|12.7|42.5|7
+Manteiga com sal|739|0.1|0.7|81.8
+Manteiga sem sal|750|0.1|0.7|83
+Maracujá|52|2.6|5.7|0.4
+Margarina|740|0.1|0.4|82
+Margarina 3/4, de girassol|524|0.1|0.3|58
+Margarina culinária para folhados, com sal|772|0.1|0.4|85.5
+Margarina industrial para pastelaria, com sal|727|0.1|0.4|80.5
+Margarina vegetal culinária, 80% gordura, com sal|722|0.1|0.4|80
+Margarina vegetal culinária, com alho e sal|692|1|4.4|74.3
+Marmelada|261|2.3|61.4|0.2
+Marmelo|53|0.3|9.3|0.2
+Maruca cozida|73|17.9|0|0.1
+Maruca crua|70|17.2|0|0.1
+Massa com ovo cozida|71|2.8|13.3|0.6
+Massa com ovo crua|360|13.9|67.6|3.1
+Massa de pimentão|44|2.6|4.4|1
+Massa folhada, congelada|398|5|31.8|27.5
+Massa miúda crua|356|12.4|70|1.8
+Massa para lasanha cozida|115|4|22.6|0.7
+Massa para lasanha crua|359|12|71.4|2.1
+Massa para pizza|289|7.8|52.5|4.8
+Massa quebrada para quiche|498|5.5|52.4|29.2
+Medronho|150|1.2|31.4|0.6
+Meia-desfeita de bacalhau|156|12.7|14.8|4.2
+Mel|314|0.5|78|0
+Mel de cana|311|0.3|77.4|0
+Melaço|269|0.6|66.6|0.1
+Melancia|32|0.6|7.3|0
+Melão (3 variedades)|39|0.8|7.9|0.3
+Meloa|39|1|8.2|0
+Merengue|353|4.1|83|0.5
+Mexilhão cozido sem sal|97|16.8|2.8|2.1
+Mexilhão cru|70|12.1|2|1.5
+Milho doce em conserva|110|2.9|18.4|1.9
+Milho, amido (pó)|364|0.4|90.2|0.2
+Milho, grão seco cru|368|9.3|70.3|4.9
+Millet, cru, seco|362|11.1|71.2|3.2
+Minarina (meia margarina)|380|0.9|0.4|41.6
+Mirtilo|43|0.5|6.4|0.6
+Mirtilo desidratado|317|3.7|46.8|4.4
+Miso, pasta de soja fermentada com arroz integral e cevada|177|11.9|15.1|6.5
+Molho "Béchamel" com manteiga|130|4|9.6|8.4
+Molho "Béchamel" com margarina|140|3.6|9.9|9.5
+Molho branco com caldo de carne de vaca|115|1.1|6.8|9.2
+Molho branco com margarina|244|4.4|18.5|16.8
+Molho de bife frito com manteiga|379|2|0.4|41
+Molho de carne de vaca assada com azeite e margarina|586|2.1|0.3|64
+Molho de carne de vaca assada com margarina|513|1.9|0.4|56
+Molho de carne de vaca estufada com azeite e margarina|260|1.7|0.4|27.9
+Molho de carne de vaca estufada com vegetais, azeite e margarina|267|1.3|1.3|28.5
+Molho de lombo de porco frito com banha|551|2.2|0|60.2
+Molho de lombo de porco frito com banha e margarina|498|2.3|0.1|54.3
+Molho de lombo de porco frito com margarina|447|2.3|0.2|48.5
+Molho de lombo de vaca frito com creme vegetal sem sal|350|2.2|0.2|37.8
+Molho de lombo de vaca frito com margarina|372|2.2|0.2|40.3
+Molho de mostarda|444|2.6|18|40.2
+Molho de soja|89|4.7|17.3|0
+Molho de tomate|107|1.1|4.9|8.8
+Molho de tomate, "ketchup"|119|1.7|26.9|0.3
+Molho de vinagrete|648|0.2|0.2|71.8
+Molho para francesinha|74|1.1|4.8|2.6
+Molho verde|246|0.7|2.3|25.6
+Morango|32|0.6|6|0.2
+Morango desidratado|322|5.8|50.9|3.8
+Morcela crua|363|12|12|29.5
+Morcela grelhada|339|12.9|13.1|25.9
+Mortadela|379|18.3|1.7|33.2
+Mousse de chocolate|285|9.5|31|13.1
+Múcua (fruto do embondeiro, baobab)|212|2.8|16.3|0.1
+Nabiça crua|17|2|1.2|0
+Nabiças cozidas|16|2.1|0.7|0
+Nabo (raiz) cozido|19|0.4|2.3|0.4
+Nabo (raiz) cru|21|0.4|3|0.4
+Nata maturada pasteurizada 30% gordura|306|1.9|2.7|32
+Nata para bater pasteurizada 34% gordura|323|2.2|2.1|34
+Nata pasteurizada 33% gordura|317|2|2.9|33
+Nata pasteurizada 36% gordura|340|2|1.9|36
+Nata pasteurizada para café, 15% gordura|153|2|2.4|15
+Nata UHT 35% gordura|335|1.8|3.1|35
+Néctar de "tutti - frutti"|46|0.1|10.8|0.1
+Néctar de alperce|56|0.2|12.9|0.1
+Néctar de ananás|46|0.2|10.5|0.1
+Néctar de laranja|43|0.2|9.6|0.1
+Néctar de maçã|48|0.1|11.3|0.1
+Néctar de maçã, "light"|22|0.1|4.6|0.2
+Néctar de pera|48|0.2|11|0.1
+Néctar de pêssego|51|0.2|11.7|0.1
+Néctar de pêssego, "light"|18|0.1|3.5|0.1
+Nectarina|49|1.4|8.7|0.1
+Nêspera|51|0.4|10.2|0.4
+Noz-moscada|506|5.8|28.5|36.3
+Noz macadâmia|752|8|5.1|76
+Noz pecan|729|9.4|5.4|72.6
+Noz, miolo|699|16.7|3.6|67.5
+Óleo "Becel"|887|0|0|98.5
+Óleo alimentar|896|0|0|99.5
+Óleo de amendoim|887|0|0|98.5
+Óleo de coco|900|0|0|100
+Óleo de girassol|896|0|0|99.5
+Óleo de linhaça|900|0|0|100
+Óleo de milho|896|0|0|99.5
+Óleo de palma|900|0|0|100
+Óleo de soja|887|0|0|98.5
+Omelete|136|12|0.2|9.5
+Omelete com manteiga|199|13|0|16.3
+Omelete com margarina|198|13|0|16.2
+Orégão seco|265|9|26.4|4.3
+Ostra, crua|65|8.6|3.9|1.7
+Ovo de codorniz, cru|150|12.9|0.4|10.7
+Ovo de galinha inteiro, cru|143|12.6|0.5|10.1
+Ovo de galinha líquido, pasteurizado|131|11.9|0|9.3
+Ovo de galinha, cozido|149|13|0|10.8
+Ovo de galinha, escalfado|150|13|0|10.9
+Ovo de galinha, estrelado|193|13.7|0|15.4
+Ovo de galinha, estrelado com azeite|191|13.8|0|15.1
+Ovo de galinha, estrelado com manteiga|194|13.7|0|15.5
+Ovo de galinha, estrelado com margarina|194|13.7|0|15.5
+Ovo de galinha, mexido com manteiga|197|13|0|16.1
+Ovo de galinha, mexido com margarina|196|13|0|16
+Ovo mexido com leite e margarina|213|11|0.9|18.3
+Paio de lombo|288|29.2|0|19
+Paio de lombo entremeado|361|22.8|0|30
+Pão de centeio|268|5.9|56.4|0.8
+Pão de centeio integral|229|7.7|41.3|2.1
+Pão de forma, de trigo com passas|291|8.3|58.3|2
+Pão de forma, de trigo enriquecido|284|8.7|54.5|2.7
+Pão de leite (trigo)|259|7.7|51.4|1.9
+Pão de ló|361|9.6|62.2|8
+Pão de milho|188|5.3|37.2|1.2
+Pão de mistura de trigo e centeio|272|9|53.8|1.4
+Pão de trigo|290|8.4|57.3|2.2
+Pão de trigo com redução de sal|248|7|51|1.2
+Pão de trigo integral|232|7.6|39.9|3
+Pão de trigo integral com passas|247|7.4|44|2.6
+Pão de trigo integral com sementes de sésamo|256|7.7|43.2|4
+Pão de trigo integral com soja|233|9.4|38.2|2.8
+Pão pita|218|7.7|42.7|1.1
+Pão ralado|359|11.2|71.6|2.3
+Papaia|45|0.6|9.1|0.1
+Papaia desidratada|361|4.8|73.3|0.8
+Pargo legítimo assado com cebola, tomate e azeite|136|15.9|1.4|6.7
+Pargo legítimo cozido|82|19.8|0|0.3
+Pargo legítimo cru|79|19.4|0|0.2
+Pargo mulato assado com cebola, tomate e azeite|137|15.2|1.4|7.1
+Pargo mulato cozido|85|19|0|1
+Pargo mulato cru|80|18.5|0|0.7
+Pasta de aves (paté), caseira|288|26.9|4.7|17.5
+Pasta de fígado de porco (paté)|363|10|3.2|34.5
+Pastel de bacalhau|227|13.8|12.3|13.4
+Pastel de feijão|322|6.8|52|9.4
+Pastel de nata|275|4.7|38.3|10.6
+Pastel folhado|415|7.1|37.4|26
+Pastilha elástica|328|6.9|75.1|0
+Pato com pele, assado sem molho|347|18.5|0|30.3
+Pato com pele, cru|394|12.3|0|38.3
+Pato sem pele, assado com margarina|276|36.2|0|14.6
+Pato sem pele, cru|133|19.3|0|6.2
+Pato sem pele, estufado com margarina|232|27.2|0|13.7
+Peixe-espada-branco cru|117|20.3|0|4
+Peixe-espada-branco frito|159|22.7|2.9|6.3
+Peixe-espada-branco grelhado|123|20.2|0|4.7
+Peixe-espada-preto cru|88|15.7|0|2.8
+Peixe-espada-preto frito|259|24.2|3.2|16.6
+Peixe-espada-preto grelhado|111|20.5|0|3.2
+Peixinhos da horta|94|4|14.9|1.4
+Pepino cru|19|1.4|1.7|0.6
+Pera (5 variedades)|57|0.1|12.2|0.4
+Pera conserva em calda de açúcar|121|0.2|28.9|0.3
+Pera cozida com açúcar|67|0.3|14.5|0.4
+Pera cozida sem açúcar|40|0.3|7.8|0.4
+Pera cristalizada|285|0.2|69.8|0.1
+Pera desidratada|300|1.9|59.9|2.6
+Percebes crus|59|13.6|0|0.5
+Perdiz crua|104|23|0|1.3
+Perdiz estufada com margarina|212|24.7|0.7|11.4
+Peru inteiro com pele, cru|137|20.5|0|6.1
+Peru, hambúrguer frito|56|8.8|3|0.7
+Peru, peito com pele, cru|134|23|0|4.7
+Peru, peito sem pele estufado com margarina|163|23.1|1.3|7.1
+Peru, peito sem pele panado|226|25.5|8.4|9.9
+Peru, peito sem pele, assado com margarina|175|28.9|0.1|6.4
+Peru, peito sem pele, cru|105|23.4|0|1.3
+Peru, perna com pele, assada com margarina|212|24.4|0|12.5
+Peru, perna com pele, crua|149|18.9|0|8.1
+Peru, perna com pele, estufada com margarina|170|19.1|1.3|9.7
+Pescada cozida (valor médio)|109|19.2|0|3.6
+Pescada crua (valor médio)|83|17.6|0|1.4
+Pescada da África do Sul cozida|110|18.9|0|3.8
+Pescada da África do Sul crua|81|17.2|0|1.3
+Pescada da África do Sul frita|175|23.2|1.7|8.4
+Pescada do Chile cozida|108|19.5|0|3.3
+Pescada do Chile crua|86|18|0|1.5
+Pescada do Chile frita|171|20.3|2.6|8.8
+Pescada europeia cozida|114|20.1|0|3.7
+Pescada europeia crua|75|17|0|0.8
+Pescada europeia frita|164|21.7|1.4|7.9
+Pescada frita (valor médio)|173|21.7|2.1|8.6
+Pescada, ovas cruas|83|14.3|0|2.9
+Pêssego (2 variedades)|50|0.8|10.6|0
+Pêssego, conserva em calda de açúcar|85|0.5|20.6|0
+Picles de pepino|74|0.5|16.5|0.5
+Pimenta branca|306|10.4|48.3|2.1
+Pimenta moída|273|10.7|38.3|2.7
+Pimenta preta|302|10.7|44.5|3.3
+Pimento cru|27|1.6|2.7|0.6
+Pimento grelhado|32|1|4.9|0.6
+Pinhão, miolo|622|33.2|5|51.7
+Pistácio torrado e salgado|616|18|12.6|53
+Pistácio torrado, sem sal|616|18|12.6|53
+Pizza de queijo e tomate|271|10.5|33.2|10.1
+Pizza de queijo, tomate e fiambre|281|11.7|29.2|12.5
+Polvo cozido sem sal|103|22.7|0|1.3
+Polvo cru|73|15.6|0|1.2
+Pombo cru|232|20.3|0|16.7
+Porco, baço|107|17.8|0.4|3.8
+Porco, bife grelhado|203|16.7|0.7|14.2
+Porco, cabeça|355|14.3|0.3|32.9
+Porco, chispe|369|16.1|0.2|33.8
+Porco, coração cru|113|18.4|0|4.4
+Porco, coração estufado com banha e margarina|193|20.9|1|10.5
+Porco, costeleta gorda crua|355|17.3|0|31.8
+Porco, costeleta gorda grelhada|305|24.3|0|23.1
+Porco, costeleta grelhada|212|18.1|0.8|14.4
+Porco, costeleta meio gorda crua|221|19.8|0|15.8
+Porco, costeleta meio gorda estufada|277|21.1|0.7|20.5
+Porco, costeleta meio gorda estufada com azeite e banha|280|21.1|0.7|20.7
+Porco, costeleta meio gorda estufada com azeite e margarina|277|21.1|0.7|20.4
+Porco, costeleta meio gorda estufada com margarina|272|21.1|0.7|19.9
+Porco, costeleta meio gorda estufada com óleo alimentar e banha|280|21.1|0.7|20.7
+Porco, costeleta meio gorda estufada, sem molho|284|26.9|0|19.6
+Porco, costeleta meio gorda frita panada|341|22.1|8.6|24.1
+Porco, costeleta meio gorda grelhada|261|27|0|17
+Porco, entrecosto cozido|235|26.9|0|14.2
+Porco, entrecosto cru|190|19.6|0|12.4
+Porco, entrecosto estufado com azeite e banha|246|20.9|0.7|17.1
+Porco, entrecosto estufado com azeite e margarina|244|20.9|0.7|16.8
+Porco, entrecosto estufado com margarina|239|20.9|0.7|16.3
+Porco, entrecosto estufado com óleo alimentar e banha|246|20.9|0.7|17.1
+Porco, entrecosto estufado sem molho|245|26.6|0|15.4
+Porco, entrecosto grelhado|243|26.8|0|15.1
+Porco, espetada grelhada|285|13.6|1.3|24.8
+Porco, fígado cru|129|20.9|0|5
+Porco, fígado frito com margarina e banha|211|23.2|0|13.1
+Porco, fígado frito sem molho|180|25.2|0|8.8
+Porco, fígado grelhado|162|26.3|0|6.3
+Porco, hambúrguer frito, sem molho|264|27.5|0|17.1
+Porco, hambúrguer grelhado|261|27.8|0|16.6
+Porco, jarrete|140|21.4|0.1|6
+Porco, língua crua|220|16.3|0|17.2
+Porco, lombo assado|220|27.5|0.2|11.3
+Porco, lombo assado com azeite e margarina|219|27.5|0.2|11.1
+Porco, lombo assado com margarina|208|28.2|0|10.6
+Porco, lombo assado com óleo alimentar e margarina|219|27.5|0.2|11.1
+Porco, lombo assado, sem molho|210|32.7|0|8.8
+Porco, lombo cru|131|22.2|0|4.7
+Porco, lombo frito|182|28.8|0|7.4
+Porco, lombo frito com manteiga|180|28.8|0|7.2
+Porco, lombo frito com margarina|184|28.8|0|7.6
+Porco, lombo frito panado|249|25.3|8.5|12.5
+Porco, lombo grelhado|189|29.1|0|8.1
+Porco, orelha crua|128|26|0.3|2.5
+Porco, pé cru|335|38|0|20.4
+Porco, perna gorda assada com azeite e margarina|353|22.4|0.2|28.2
+Porco, perna gorda assada com margarina|347|22.4|0.2|27.6
+Porco, perna gorda assada com óleo alimentar e margarina|353|22.4|0.2|28.2
+Porco, perna gorda assada, sem molho|283|27.6|0|19.2
+Porco, perna gorda crua|239|18.1|0|18.5
+Porco, perna gorda grelhada|287|25.5|0|20.6
+Porco, perna magra assada com azeite e margarina|245|26|0.2|14.6
+Porco, perna magra assada com margarina|239|26|0.2|14
+Porco, perna magra assada com óleo alimentar e margarina|244|26|0.2|14.5
+Porco, perna magra assada, sem molho|213|31|0|9.9
+Porco, perna magra crua|152|21|0|7.5
+Porco, perna magra estufada com azeite e banha|206|22.4|0.7|11.9
+Porco, perna magra estufada com azeite e margarina|203|22.4|0.7|11.6
+Porco, perna magra estufada com margarina|198|22.4|0.7|11.1
+Porco, perna magra estufada com óleo alimentar e banha|206|22.4|0.7|11.9
+Porco, perna magra estufada, sem molho|213|28.6|0|11
+Porco, perna magra grelhada|215|27.5|0|11.7
+Porco, pulmões crus|101|13.9|0.2|5
+Porco, rim cru|95|17|0|3
+Porco, rim frito com margarina|206|23.6|0|12.4
+Porco, rojões de carne gorda|244|14.9|0.8|19
+Porco, rojões de carne magra|140|11.1|8.7|5.6
+Porco, sangue cru|72|16.6|0.4|0.4
+Porco, toucinho entremeado fresco, cru|682|8.4|0|72
+Porco, toucinho entremeado fresco, grelhado sem adição de sal|676|16.1|0|67.9
+Porco, toucinho entremeado ligeiramente salgado, cozido sem adição de sal|372|16.7|0|33.9
+Porco, toucinho entremeado ligeiramente salgado, cru|506|13.7|0|50.1
+Porco, toucinho entremeado magro|333|17.4|0.5|29.1
+Pota crua|75|16.3|0|1.1
+Presunto|215|25|0|12.8
+Proteína texturizada de soja|327|53|17.2|1.4
+Pudim de leite e ovos|246|6.1|44.8|4.7
+Pudim flan caseiro|211|6.2|36.3|4.5
+Pudim instantâneo em pó|412|2|79.4|9.4
+Pudim instantâneo preparado com leite magro|104|3.2|18.3|1.9
+Pudim instantâneo preparado com leite meio gordo|113|3.1|18.3|3
+Puré de batata|126|2.3|16.8|5.2
+Queijada de queijo fresco|301|7.5|56.7|4.7
+Queijada de queijo magro|292|6.7|55.4|4.7
+Queijada de requeijão|311|7.2|40.8|13.1
+Queijo Amarelo da Beira Baixa|361|20.5|1.5|30
+Queijo Brie|321|18.8|0|27.3
+Queijo Camembert|254|19.2|0.2|19.6
+Queijo Cheddar|419|25.4|0.1|34.9
+Queijo creme para barrar|263|9.3|6.9|22
+Queijo creme para barrar, alto teor polinsaturados|263|9.3|6.9|22
+Queijo de Azeitão|339|19.5|2.6|27.5
+Queijo de cabra "Pure chèvre"|286|13|2|25
+Queijo de cabra atabafado, curado|313|18.2|2.7|24
+Queijo de cabra atabafado, fresco|202|13|2.5|15.4
+Queijo de cabra curado|382|21|2.5|30.5
+Queijo de Castelo Branco|356|20.8|1.8|29.2
+Queijo de Évora|405|23.8|2.1|32.9
+Queijo de mistura (vaca, cabra e ovelha)|329|19.6|2.4|26.7
+Queijo de Nisa|451|23.4|2.6|38
+Queijo de ovelha curado|401|22.8|2.4|33
+Queijo de ovelha, amanteigado|361|19.7|1.6|30.3
+Queijo de vaca curado|355|22.3|1.2|29
+Queijo de vaca curado, magro|208|27.1|2.4|10
+Queijo de vaca curado, meio gordo|280|23|1.7|20.1
+Queijo de vaca, amanteigado|343|20.2|1.7|28.3
+Queijo Emmental|384|28.9|0|29.7
+Queijo flamengo|349|22.7|0.8|28.3
+Queijo flamengo light (-50% gordura)|228|26.8|0|13.3
+Queijo fresco açucarado com sabor a fruta|110|7.3|11.6|3.6
+Queijo fresco de cabra|182|12|2.1|13.8
+Queijo fresco de ovelha|204|11.3|3.9|15.6
+Queijo fresco magro|96|13|6.9|1.8
+Queijo fresco meio gordo|156|9.2|2.7|11.9
+Queijo fundido 40% gordura|326|22.5|0.2|25.7
+Queijo Gouda|380|25.3|0|30.6
+Queijo Gruyère|415|27.2|1.4|33.3
+Queijo Mascarpone|458|7.6|0.3|47
+Queijo Mestiço de Tolosa|407|24.5|1.8|33
+Queijo Mozzarella fresco|256|18.7|1.3|19.5
+Queijo Parmesão|406|37.7|0.1|27.8
+Queijo Quark açucarado magro com sabor a fruta|78|8.4|10.8|0.1
+Queijo Quark natural magro|60|10.3|4|0.3
+Queijo Quark natural meio gordo|125|8.1|3.9|8.5
+Queijo Raclette|354|25.5|0.4|27.8
+Queijo Roquefort|372|22|0.2|31.5
+Queijo São Jorge|409|26.6|2.5|32.5
+Queijo Serpa|375|22|2.4|30.5
+Queijo Serra da Estrela|324|23.8|2|24
+Queijo Serra da Estrela, velho|389|25.5|0.2|31.5
+Queque|443|6.1|51.7|23.3
+Quiabo cru|37|2.8|3.1|1
+Quiche de espinafres|275|12.6|12.4|19.1
+Quiche de vegetais|302|11.9|12.9|22.2
+Quiche lorraine|374|14.4|23.5|24.5
+Quivi, "Kiwi"|54|0.9|9.5|0.5
+Quivi, "Kiwi" desidratado|333|6.1|60.6|2.8
+Rabanada|294|4.7|31.3|16.6
+Rabanete cru|15|1|1.9|0.2
+Rábano cru|88|6|10.7|0.7
+Raia crua|58|14.1|0|0.2
+Rancho com carne de galinha, porco e vaca|84|5.1|6.5|3.9
+Rancho com carne de porco|107|4.8|6.8|6.2
+Rebentos de alfalfa crus|29|4|0.3|0.7
+Rebentos de bambu crus|14|0.9|1.2|0.2
+Rebentos de feijão mungo|21|2|2.1|0.2
+Rebentos de soja crus|98|9.2|5.8|3.9
+Rebuçados|381|0.3|95|0
+Requeijão de cabra|197|10.7|3.4|15.5
+Requeijão de mistura (ovelha e cabra)|136|7.8|3.7|10
+Requeijão de mistura (vaca, ovelha e cabra)|179|13.6|4.9|11.7
+Requeijão de ovelha|246|11|3.8|20.6
+Requeijão de vaca|149|8|5.8|10.4
+Rissol|280|7.3|31.8|13.4
+Rissol de camarão|211|6.1|26.6|8.6
+Robalo assado com cebola, azeite, banha e manteiga|192|20.4|0.6|11.8
+Robalo cozido|182|21|0|10.9
+Robalo cru|106|18.5|0|3.5
+Robalo grelhado|209|23|0|13
+Romã|60|0.4|12|0.4
+Rúcula crua|29|2.6|2.2|0.7
+Safio cru|109|17.7|0|4.2
+Sal|0|0|0|0
+Salada de alface e tomate temperada com azeite e vinagre|30|1.1|2.6|1.4
+Salada de atum|104|6.9|8.4|4.3
+Salada de bacalhau com grão|115|8.7|7.6|4.9
+Salada de fruta|57|0.6|12.5|0.1
+Salada russa|116|1.4|5.6|9.3
+Salame|422|19.5|1.3|37.6
+Salicórnia fresca|14|0.7|1.1|0.2
+Salmão cozido|273|20.7|0|21.1
+Salmão cru|262|16.2|0|21.9
+Salmão grelhado|309|23.8|0|23.7
+Salmonete cru|136|21.7|0.1|5.5
+Salpicão|412|20.5|0|36.7
+Salsa fresca|20|3.1|0.4|0
+Salsa seca|244|15.8|14.5|7
+Salsicha de soja|252|13.5|0.6|20.9
+Salsicha fresca crua|210|15.5|0|16.4
+Salsicha fresca estufada com couve e azeite|140|7.2|1.1|11.6
+Salsicha fresca estufada com legumes e azeite|121|5.9|3.7|8.9
+Salsicha tipo Frankfurt|178|9|2.4|14.7
+Salsicha tipo Frankfurt frita (escorrido o óleo)|201|10.2|2.8|16.5
+Salsicha tipo Frankfurt grelhada|211|12|3.2|16.7
+Sapateira crua|104|19.5|0|2.9
+Sarda cozida|174|19.7|0|10.6
+Sarda crua|181|19|0|11.7
+Sarda grelhada|191|22.5|0|11.2
+Sardinha frita|300|22.5|8.7|19.4
+Sardinha gorda crua|221|18.4|0|16.4
+Sardinha gorda frita|247|23|3.5|15.6
+Sardinha gorda grelhada|211|25|0|12.3
+Sardinha meio gorda conserva em água, sem espinha e sem pele|174|22|0|9.6
+Sardinha meio gorda conserva em azeite|202|22.7|0.8|12
+Sardinha meio gorda conserva em azeite (escorrido)|189|26.3|0.8|9
+Sardinha meio gorda crua|158|18.9|0|9.1
+Sardinha meio gorda frita|174|20|0.5|10.2
+Sardinha meio gorda grelhada|168|25.9|0|7.2
+Seitan|139|25|5.4|1.7
+Sementes de abóbora, cruas, secas, miolo|567|22|10|46.4
+Sementes de cânhamo secas|424|29.5|2.4|27.9
+Sementes de chia|456|14.4|4.6|34.4
+Sementes de coentro|358|12.4|16.2|17.8
+Sementes de girassol, cruas, secas, miolo|585|22.1|8.3|48.5
+Sementes de linhaça cruas|487|25|18.1|31
+Sementes de melão|590|28.5|9|47.7
+Sementes de mostarda|449|25.5|15.9|28.8
+Sementes de papoila|565|19.3|13.7|45.9
+Sementes de sésamo|620|22.1|6.4|55
+Sêmola de milho|350|8.8|73.8|1.1
+Shortening para pastelaria|878|0|0|97.5
+Shortening para restaurante|900|0|0|100
+Sidra (vinho de maçã)|48|0|2.3|0
+Sobremesa à base de soja|95|3.5|15.8|1.8
+Soja cozida sem sal|151|12.5|5.6|7.5
+Soja, farinha com baixo teor de gordura|314|44|21.8|2.6
+Soja, grão seco, cru|407|32.8|18.3|19.3
+Solha crua|90|19|0|1.6
+Solha frita|147|23|8.9|2
+Solha grelhada|104|21.9|0|1.8
+Sonhos|389|8.7|29.2|26.2
+Sopa à lavrador|51|1.2|7.6|1.5
+Sopa de abóbora|33|0.6|4|1.5
+Sopa de agrião|37|1|4.2|1.6
+Sopa de agrião com leite|33|1.3|5.3|0.5
+Sopa de agrião com requeijão|28|1.1|2|1.6
+Sopa de carne de porco|60|4|7.3|0.9
+Sopa de cebola|40|0.8|5.4|1.5
+Sopa de cenoura|29|0.9|4.4|0.6
+Sopa de couve-branca|40|0.8|5.4|1.5
+Sopa de couve-lombarda|41|0.9|5.3|1.5
+Sopa de cozido|36|2.6|2.9|1.4
+Sopa de ervilhas|48|1.6|6.4|1.5
+Sopa de espinafres|39|1|4.8|1.6
+Sopa de espinafres com ovos|93|2.5|4.7|6.9
+Sopa de favas|49|1.8|6.4|1.5
+Sopa de feijão|51|2.5|4.1|2.1
+Sopa de feijão-branco com couve-portuguesa, sem adição de sal|47|2.5|4.9|1.3
+Sopa de feijão-manteiga|46|1.2|8.7|0.4
+Sopa de feijão-manteiga com couve-lombarda|43|2.1|3.5|1.8
+Sopa de feijão-verde|32|0.7|3.5|1.5
+Sopa de feijão-verde e cenoura|42|0.9|5.8|1.5
+Sopa de feijão-verde e nabo|36|0.7|3.4|1.9
+Sopa de grão à moda da avó|107|4.7|15.1|2.3
+Sopa de grão com arroz e espinafres|60|2.4|7|2.1
+Sopa de grão com arroz, espinafres e coentros|45|2.1|5.3|1.3
+Sopa de grão com espinafres|55|2.6|5.1|2.3
+Sopa de nabiças (ou de grelos de nabo)|40|1|5.8|1.2
+Sopa de peixe|17|1.3|1.3|0.6
+Sopa de peixe com massa|46|2.8|5.8|1.1
+Sopa de tomate|31|1.1|4.4|0.8
+Sopa de vegetais|11|0.8|1.2|0.2
+Sopa juliana|31|0.9|4.3|0.9
+Sopa, caldo verde|43|1.3|5.3|1.7
+Sopa, canja de galinha|40|2|5.8|0.9
+Sopa, creme de cenoura|34|0.6|4.4|1.4
+Sopa, puré de feijão|43|1.6|4.5|1.6
+Sopa, puré de vegetais|42|1|5.5|1.5
+Sucedâneo de café, 20% de café, pó|359|6.5|77|2.8
+Sucedâneo de café, pó|375|5|81|3.4
+Sultanas|304|2.7|69.4|0.4
+Sumo de ananás, 100%|45|0.5|10.3|0
+Sumo de ananás, concentrado|265|0|64.7|0
+Sumo de laranja, 100%|45|0.5|10.3|0
+Sumo de laranja, concentrado|272|0.1|64.9|0.7
+Sumo de limão, fresco (espremido)|25|0.3|1.5|0
+Sumo de maçã, 100%|44|0.5|10.3|0
+Sumo de pêssego, 100%|50|0.5|11.5|0
+Sumo de tomate, 100%|21|1.1|3.5|0
+Tahini|661|18.5|11.6|58.9
+Tâmara fresca|147|1.2|33.2|0.1
+Tâmara seca|298|2.5|67.3|0.3
+Tamarilho sem pele|34|2|4.6|0.3
+Tamarindo cru|242|2.3|54.9|0.3
+Tamboril cru|73|17.9|0|0.2
+Tamboril grelhado|88|21.4|0|0.3
+Tângera|41|0.7|7.8|0.1
+Tangerina|44|0.7|8.7|0.1
+Tapioca|356|0.3|87.5|0.2
+Tarte de maçã|200|1.8|29.3|8
+Tarte de maçã e pêssego|224|4.4|36.7|6.2
+Tisana, infusão de ervas|1|0|0.2|0
+Tofu frito com azeite|108|8.7|1.1|7.6
+Tofu frito com óleo de milho|108|8.7|1.1|7.6
+Tofu simples|77|8.5|0.7|4.4
+Tomate cherry cru|30|1|4|0.8
+Tomate concentrado|82|3.7|14.3|0.3
+Tomate cru|21|0.8|3.1|0.3
+Tomate em conserva ao natural|21|1|3.2|0.3
+Tomate seco|296|10.5|46|3.9
+Tomilho fresco|52|1.5|7.4|1.2
+Tomilho seco|321|9.1|45.3|7.4
+Toranja|36|0.9|6|0.1
+Torta de chocolate e chantilly|369|8|29.6|23.9
+Tosta de trigo|377|12.5|69.7|4.2
+Tosta de trigo integral|373|15.4|62.6|5.1
+Tosta de trigo sem sal|379|11.3|72.7|3.8
+Tosta de trigo simples|379|11.3|72.7|3.8
+Tremoço cozido, sem sal|124|16|7.2|2.4
+Tremoço, cozido e salgado|115|15.7|3.7|2.4
+Trigo Sarraceno (grão) cru|337|12.4|61.3|2.5
+Tripa de porco fresca|180|7.6|0|16.6
+Tripa de vaca crua|160|16.3|0.1|10.5
+Truta arco-íris crua|92|17.8|0|2.3
+Truta arco-íris grelhada|119|21.3|0|3.7
+Túbera (trufa) crua|77|3.3|14.5|0.3
+Uva branca (5 variedades)|78|0.3|17.3|0.5
+Uva de mesa (branca e tinta)|73|0.6|15.7|0.5
+Uva seca (passas)|300|3|68.2|0.8
+Uva tinta (5 variedades)|83|0.3|18.6|0.5
+Vaca assada com azeite e margarina|280|24.2|0|20.4
+Vaca assada com azeite, margarina e óleo alimentar|280|24.2|0|20.4
+Vaca assada com margarina|273|24.2|0|19.6
+Vaca assada com óleo alimentar e margarina|280|24.2|0|20.4
+Vaca assada, sem molho|192|26.9|0|9.4
+Vaca magra cozida|259|33.7|0|13.8
+Vaca magra estufada|226|21.8|1.2|14.2
+Vaca magra estufada à jardineira|111|5.5|11.4|4.4
+Vaca magra estufada com azeite e margarina|226|21.8|1.2|14.2
+Vaca magra estufada com margarina|220|21.8|1.2|13.6
+Vaca magra estufada com óleo alimentar e margarina|226|21.8|1.2|14.2
+Vaca magra estufada, sem molho|234|31.5|0|12
+Vaca meio gorda estufada|278|21.4|1.2|20.2
+Vaca meio gorda estufada com azeite e margarina|278|21.4|1.2|20.2
+Vaca meio gorda estufada com margarina|273|21.4|1.2|19.6
+Vaca meio gorda estufada com óleo alimentar e margarina|278|21.4|1.2|20.2
+Vaca meio gorda estufada, sem molho|280|31.8|0|17
+Vaca para assar crua|174|19.4|0|10.7
+Vaca para cozer ou estufar magra crua|175|21.7|0|9.8
+Vaca para cozer ou estufar meio gorda crua|227|21.3|0|15.8
+Vaca, bife à café|226|16.9|1.6|16.5
+Vaca, bife à Marrare com manteiga|368|16|0.9|33.3
+Vaca, bife à Marrare com margarina|363|16|0.8|32.8
+Vaca, bife com ovo a cavalo, frito com banha|172|17.2|0.4|11.2
+Vaca, bife com ovo a cavalo, frito com manteiga|155|17.4|0.5|9.2
+Vaca, bife cru (valor médio de acém, alcatra e lombo)|122|20.9|0|4.3
+Vaca, bife frito com manteiga (valor médio de acém, alcatra e lombo)|201|24.2|0.1|11.5
+Vaca, bife frito, sem molho (valor médio de acém, alcatra e lombo)|183|28.8|0|7.5
+Vaca, bife grelhado (valor médio de acém, alcatra e lombo)|163|26.4|0|6.4
+Vaca, cachaço cru|137|21.3|0.3|5.6
+Vaca, coração cozido|123|23.4|0|3.3
+Vaca, coração cru|92|17|0|2.7
+Vaca, coração estufado com banha e margarina|154|17.7|0.9|7.8
+Vaca, espetada grelhada|213|23.5|0.8|12.8
+Vaca, fígado cru|132|20.9|2.1|4.4
+Vaca, fígado frito sem molho|171|24.5|2.5|7
+Vaca, hambúrguer cru|142|20.2|0|6.8
+Vaca, hambúrguer frito|207|19.1|1.2|13.8
+Vaca, hambúrguer grelhado|183|27.3|0|8.2
+Vaca, língua crua|199|15.9|0|15
+Vaca, língua estufada, sem molho|267|19.8|0|20.9
+Vaca, lombo magro assado com azeite e margarina|205|26.2|0|11.1
+Vaca, lombo magro assado com azeite, manteiga e óleo alimentar|207|26.2|0|11.4
+Vaca, lombo magro assado com margarina|198|26.2|0|10.4
+Vaca, lombo magro assado com óleo alimentar e margarina|205|26.2|0|11.1
+Vaca, lombo magro assado, sem molho|172|29.2|0|6.1
+Vaca, lombo magro cru|114|21|0|3.3
+Vaca, lombo magro no forno, com tomate, cebola, cenoura e alho|128|11.9|2.5|6.8
+Vaca, picanha grelhada|194|21.7|0|11.9
+Vaca, rim cru|92|18|0|2.2
+Veado cru|112|20.6|0|3.3
+Vieira, crua|83|18.5|0|1
+Vinagre|22|0.3|0.6|0
+Vinho branco de uvas sobreamadurecidas|110|0|10.3|0
+Vinho da Madeira|147|0|7.5|0
+Vinho do Porto, doce|167|0.1|14|0
+Vinho do Porto, meio seco|141|0.1|6.5|0
+Vinho do Porto, seco|138|0.1|4|0
+Vinho espumante, Bruto|74|0|1.1|0
+Vinho espumante, Doce|110|0.1|12|0
+Vinho espumante, Extra bruto|71|0|0.7|0
+Vinho espumante, Extra seco|76|0|2.2|0
+Vinho espumante, Meio seco|80|0|4.1|0
+Vinho espumante, Seco|77|0|3.1|0
+Vinho frisante|68|0|2|0
+Vinho licoroso, teor alcoólico  ≥17 e <20%vol.|126|0|6.1|0
+Vinho licoroso, teor alcoólico <17%vol.|123|0|7.8|0
+Vinho licoroso, teor alcoólico ≥20% vol.|147|0|7.5|0
+Vinho maduro branco, teor alcoólico <12,5% vol.|74|0|1.1|0
+Vinho maduro branco, teor alcoólico ≥12,5% vol.|98|0|1.1|0
+Vinho maduro palhete|65|0.1|0.1|0
+Vinho maduro tinto, teor alcoólico <12,5% vol.|72|0|0.9|0
+Vinho maduro tinto, teor alcoólico ≥12,5% vol.|96|0|0.9|0
+Vinho rosé de uvas sobreamadurecidas|107|0|9.3|0
+Vinho rosé, teor alcoólico <12,5% vol.|71|0|1.3|0
+Vinho rosé, teor alcoólico ≥12,5% vol.|103|0|0.9|0
+Vinho verde branco|60|0|0.1|0
+Vinho verde tinto|59|0|0.3|0
+Vitela, bife cru|149|19.9|0.2|7.6
+Vitela, bife frito|229|19|0.4|16.4
+Vitela, chambão cru|195|20.3|0.2|12.6
+Vitela, coração cru|100|16.8|0|3.6
+Vitela, costeleta crua|121|20|0|4.5
+Vitela, costeleta frita com margarina|183|23.4|0|9.9
+Vitela, costeleta frita panada|148|19.7|3.4|5.3
+Vitela, costeleta frita sem molho|159|24.3|0|6.9
+Vitela, costeleta grelhada|131|25.2|0|3.3
+Vitela, fígado cru|119|20.3|1.5|3.5
+Vitela, fígado frito com margarina e banha|201|22.6|1.7|11.5
+Vitela, fígado frito sem molho|179|24.6|1.5|8.3
+Vitela, fígado grelhado|153|25.7|1.9|4.7
+Vitela, lombo assado com azeite e margarina|225|23|0.2|14.4
+Vitela, lombo assado com azeite, margarina e óleo alimentar|225|23|0.2|14.4
+Vitela, lombo assado com margarina e óleo alimentar|225|23|0.2|14.4
+Vitela, lombo assado, sem molho|151|25.1|0|5.6
+Vitela, lombo cru|148|19.9|0|7.6
+Vitela, lombo frito com margarina|217|23.5|0|13.7
+Vitela, lombo frito, sem molho|195|24.9|0|10.6
+Vitela, lombo grelhado|150|25|0|5.6
+Vitela, pá crua|138|23.3|0.3|4.9
+Vitela, peito magro cozido|171|24.8|0|8
+Vitela, peito magro cru|147|19.6|0|7.6
+Vitela, peito magro estufado|208|22.9|0.6|12.6
+Vitela, peito magro estufado com azeite e margarina|208|22.9|0.6|12.6
+Vitela, peito magro estufado com azeite, margarina e óleo alimentar|208|22.9|0.6|12.6
+Vitela, peito magro estufado com margarina e óleo alimentar|208|22.9|0.6|12.6
+Vitela, peito magro estufado, sem molho|179|26|0|8.3
+Wasabi, raiz crua|100|4.8|15.8|0.6`;
+var FD=DB.split("\n").map(function(l){var a=l.split("|");return[a[0],+a[1],+a[2],+a[3],+a[4]]}).sort(function(a,b){return a[0].localeCompare(b[0],"pt")}),SP={};
+var SPR=[["azeite",13],["oleo",13],["acucar",12],["manteiga",12],["margarina",12],["aveia",10],["maionese",14],["arroz",20],["iogurte",20]];
+FD.forEach(function(a){var q=nrm(a[0]);for(var i=0;i<SPR.length;i++)if(q.indexOf(SPR[i][0])==0){SP[a[0]]=SPR[i][1];break}});
+function fopts(q){q=nrm(q||"");return FD.map(function(a,i){return nrm(a[0]).indexOf(q)>=0?'<option value="'+i+'">'+esc(a[0])+'</option>':''}).join('')}
+function flt(){$("xf").innerHTML=fopts($("xs").value)+'<option value="o">Outro (indicar macros)</option>'}
+function msum(sid,d){var t={k:0,p:0,c:0,f:0};MLS.forEach(function(m){if(m.student_id==sid&&m.day==d){t.k+=+m.kcal;t.p+=+m.protein;t.c+=+m.carbs;t.f+=+m.fat}});return t}
+function nsum(sid){var t=msum(sid,T);return t.k?Math.round(t.k)+" kcal · P "+Math.round(t.p)+" · H "+Math.round(t.c)+" · G "+Math.round(t.f)+" g":"sem refeições registadas"}
+async function addMl(){var f=$("xf").value,g=+$("xg").value,m;
+if($("xu").value=="s")g=g*(SP[(FD[f]||[])[0]]||15);
+if(f=="o"){var n=$("xn").value.trim();if(!n||!(+$("xk").value>0)){alert("Indica o nome e as calorias do alimento.");return}m={n:n,g:g||null,k:+$("xk").value,p:+$("xp").value||0,c:+$("xc").value||0,f:+$("xq").value||0}}
+else{if(!(g>0)){alert("Indica a quantidade.");return}var a=FD[f],q=g/100;m={n:a[0],g:r1(g),k:a[1]*q,p:a[2]*q,c:a[3]*q,f:a[4]*q}}
+var r=await sb.from("meals").insert({student_id:(me.role=="treinador"?nuS:me.id),day:nd,meal:$("xr").value,name:m.n,grams:m.g,kcal:r1(m.k),protein:r1(m.p),carbs:r1(m.c),fat:r1(m.f)});if(r.error){alert(r.error.message);return}await rl()}
+async function delMl(id){await sb.from("meals").delete().eq("id",id);await rl()}
+function vNu(){var t=msum(me.id,nd),L=MLS.filter(function(m){return m.student_id==me.id&&m.day==nd});
+var h='<input type="date" value="'+nd+'" onchange="nd=this.value;R()"><div class="card"><div class="mu">Total do dia (aproximado)</div><div class="big">'+Math.round(t.k)+' kcal</div><div class="g2 b"><span>Proteína '+Math.round(t.p)+' g</span><span>Hidratos '+Math.round(t.c)+' g</span><span>Gordura '+Math.round(t.f)+' g</span></div></div>'+goalsBar(t);
+RF.forEach(function(r){var A=L.filter(function(m){return m.meal==r});if(!A.length)return;h+='<div class="card"><div class="b">'+r+'</div>'+A.map(function(m){return'<div class="row" style="margin-top:6px"><div>'+esc(m.name)+(m.grams?' · '+m.grams+' g':'')+'<div class="mu">'+Math.round(m.kcal)+' kcal · P '+Math.round(m.protein)+' · H '+Math.round(m.carbs)+' · G '+Math.round(m.fat)+'</div></div>'+B("×","r","delMl",m.id)+'</div>'}).join('')+'</div>'});
+return h+'<h2>Adicionar alimento</h2><div class="card"><div class="g2"><select id="xr">'+RF.map(function(r){return'<option>'+r+'</option>'}).join('')+'</select><div class="g2" style="margin:0"><input id="xg" type="number" placeholder="Quantidade"><select id="xu"><option value="g">gramas</option><option value="s">colheres de sopa</option></select></div></div><input id="xs" placeholder="Pesquisar alimento…" oninput="flt()"><select id="xf">'+fopts("")+'<option value="o">Outro (indicar macros)</option></select><div class="mu">Só para “Outro”, indica os totais:</div><input id="xn" placeholder="Nome do alimento"><div class="g2"><input id="xk" type="number" placeholder="kcal"><input id="xp" type="number" placeholder="Proteína g"></div><div class="g2"><input id="xc" type="number" placeholder="Hidratos g"><input id="xq" type="number" placeholder="Gordura g"></div><button class="btn" onclick="addMl()">Adicionar</button><p class="mu">Valores por 100 g de parte edível (bebidas alcoólicas: por 100 ml); as colheres de sopa são aproximadas. Fonte: Base de Dados da Composição de Alimentos. Instituto Nacional de Saúde Doutor Ricardo Jorge, I. P. - INSA. v 7.1 - 2026.</p></div>'}
+var LY=[],MET=["MB Way","João","Dinheiro"];
+function dfmt(s){return s.split("-").reverse().join("/")}
+function endOf(st,m){var x=new Date(st+"T12:00:00");x.setMonth(x.getMonth()+m);x.setDate(x.getDate()-1);return iso(x)}
+function dleft(e){return Math.round((new Date(e+"T12:00:00")-new Date(T+"T12:00:00"))/864e5)}
+function fzSt(e){var d=dleft(e);return d<0?'Terminada':d<=30?'Termina em '+d+' dias':'Ativa · faltam '+d+' dias'}
+function pmSel(id){return'<select id="pm'+id+'" style="width:auto;margin:0">'+MET.map(function(m){return'<option>'+m+'</option>'}).join('')+'</select>'}
+function pmeth(sid){var p=PA.find(function(x){return x.student_id==sid&&x.month==M});return p&&PM[p.id]?PM[p.id]:"—"}
+function mth(){var o={};PA.forEach(function(p){if(p.month==M){var k=PM[p.id]||"Sem método";o[k]=(o[k]||0)+Number(p.amount)}});var k=Object.keys(o);return k.length?'<div class="card"><div class="mu">Este mês por método (inclui o valor pago ao João)</div>'+k.map(function(m){return'<div class="row"><span>'+esc(m)+'</span><span class="b">'+eur(o[m])+'</span></div>'}).join('')+'</div>':''}
+function fzc(){var s=$("fs").value,m=+$("fm").value;if(s)$("fe").value=endOf(s,m)}
+async function addFz(){var a=$("fa").value,s=$("fs").value,e=$("fe").value;if(!a||!s||!e){alert("Escolhe o aluno e as datas.");return}if(e<s){alert("O fim tem de ser depois do início.");return}var r=await sb.from("loyalty").insert({student_id:a,months:+$("fm").value,start_date:s,end_date:e});if(r.error){alert(r.error.message);return}await rl()}
+async function updFz(id,k,v){var r=await sb.from("loyalty").update(k=="start"?{start_date:v}:{end_date:v}).eq("id",id);if(r.error)alert(r.error.message);await rl()}
+async function delFz(id){if(!confirm("Apagar esta fidelização?"))return;await sb.from("loyalty").delete().eq("id",id);await rl()}
+function vFz(){if(!ST.length)return'<p class="mu">Ainda não há alunos.</p>';var A=LY.filter(function(l){return dleft(l.end_date)>=0}),soon=A.filter(function(l){return dleft(l.end_date)<=30}).length;
+var h='<div class="g2"><div class="card"><div class="mu">Ativas</div><div class="big">'+A.length+'</div></div><div class="card"><div class="mu">A terminar em 30 dias</div><div class="big">'+soon+'</div></div></div><div class="card"><div class="b">Nova fidelização</div><select id="fa">'+ST.map(function(s){return'<option value="'+s.id+'">'+esc(s.name)+'</option>'}).join('')+'</select><div class="g2"><select id="fm" onchange="fzc()"><option value="6">6 meses</option><option value="12">12 meses</option></select><input id="fs" type="date" value="'+T+'" onchange="fzc()"></div><label class="mu">Fim (calculado, podes alterar)</label><input id="fe" type="date" value="'+endOf(T,6)+'"><button class="btn" onclick="addFz()">Guardar</button></div><h2>Fidelizações</h2>';
+if(!LY.length)h+='<p class="mu">Ainda não há fidelizações registadas.</p>';
+LY.slice().sort(function(a,b){var x=dleft(a.end_date),y=dleft(b.end_date);return(x<0)-(y<0)||(x<0?y-x:x-y)}).forEach(function(l){var s=stu(l.student_id);if(!s)return;h+='<div class="card"><div class="row"><div><div class="b">'+esc(s.name)+'</div><div class="mu">'+l.months+' meses · '+fzSt(l.end_date)+'</div></div>'+B("×","r","delFz",l.id)+'</div><div class="g2"><div><label class="mu">Início</label><input type="date" value="'+l.start_date+'" onchange="updFz(\''+l.id+'\',\'start\',this.value)"></div><div><label class="mu">Fim</label><input type="date" value="'+l.end_date+'" onchange="updFz(\''+l.id+'\',\'end\',this.value)"></div></div></div>'});return h}
+function fzMe(){var L=LY.filter(function(l){return l.student_id==me.id}).sort(function(a,b){return a.end_date<b.end_date?1:-1});if(!L.length)return"";var l=L[0];return'<h2>Fidelização</h2><div class="card"><div class="b">'+l.months+' meses</div><div class="mu">'+dfmt(l.start_date)+' a '+dfmt(l.end_date)+' · '+fzSt(l.end_date)+'</div></div>'}
+function assignH(p){return'<div class="mu" style="margin-top:8px">Atribuir a alunos</div><div class="ac">'+[["all","Todos"],["PT","Só PT"],["Grupo","Só Grupo"],["none","Nenhum"]].map(function(a){return B(a[1],"o","bulkPl",p.id,a[0])}).join('')+'</div>'+ST.map(function(s){return'<label class="ck"><input type="checkbox" '+(SPL.some(function(x){return x.student_id==s.id&&x.plan_id==p.id})?'checked':'')+' onchange="tglA(\''+p.id+'\',\''+s.id+'\')">'+esc(s.name)+' <span class="tag">'+s.type+'</span></label>'}).join('')}
+async function bulkPl(pid,mode){op[pid]=true;var r;if(mode=="none")r=await sb.from("student_plans").delete().eq("plan_id",pid);else{var rows=ST.filter(function(s){return mode=="all"||s.type==mode}).map(function(s){return{student_id:s.id,plan_id:pid}});if(!rows.length){alert("Não há alunos desse tipo.");return}r=await sb.from("student_plans").upsert(rows,{onConflict:"student_id,plan_id"})}if(r&&r.error)alert(r.error.message);await rl()}
+async function tglA(pid,sid){op[pid]=true;await togPl(sid,pid)}
+var PM={};
+function r2(x){return Math.round(x*100)/100}
+function expPag(){if(typeof XLSX=="undefined"){alert("Não foi possível carregar o exportador. Verifica a ligação.");return}
+var rows=PA.slice().sort(function(a,b){return a.month<b.month?1:a.month>b.month?-1:0}).map(function(p){var s=stuA(p.student_id)||{};return{"Aluno":s.name||"","Tipo":s.type||"","Mês":p.month,"Data de pagamento":p.paid_on||"","Valor (€)":Number(p.amount),"Método":PM[p.id]||""}});
+var mm={},mo={};rows.forEach(function(r){var m=r["Método"]||"Sem método",k=r["Mês"]+"|"+m;mm[m]=mm[m]||{n:0,t:0};mm[m].n++;mm[m].t+=r["Valor (€)"];mo[k]=mo[k]||{n:0,t:0};mo[k].n++;mo[k].t+=r["Valor (€)"]});
+var A=Object.keys(mm).map(function(m){return{"Método":m,"Nº de pagamentos":mm[m].n,"Total (€)":r2(mm[m].t)}}),Bm=Object.keys(mo).sort().reverse().map(function(k){var q=k.split("|");return{"Mês":q[0],"Método":q[1],"Nº de pagamentos":mo[k].n,"Total (€)":r2(mo[k].t)}});
+var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),"Pagamentos");XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(A),"Por método");XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(Bm),"Por mês e método");XLSX.writeFile(wb,"pagamentos-"+T+".xlsx")}
+async function updFee(id,v){await upd(id,"fee",v);if($("pa"+id)&&!paid(id))$("pa"+id).value=v}
+async function updPay(pid,v){var n=parseFloat(v);if(isNaN(n)||n<0){alert("Valor inválido.");return}var r=await sb.from("payments").update({amount:n}).eq("id",pid);if(r.error)alert(r.error.message);await rl()}
+async function updMeth(pid,m){var r=await sb.from("payment_methods").upsert({payment_id:pid,method:m},{onConflict:"payment_id"});if(r.error)alert(r.error.message);await rl()}
+function payRow(s){var p=PA.find(function(x){return x.student_id==s.id&&x.month==M});
+return'<div class="card"><div class="row"><div class="b">'+esc(s.name)+' <span class="tag">'+s.type+'</span></div>'+(p?'<span class="tag ok">✓ Pago</span>':'<span class="tag bad">Por pagar</span>')+'</div><div class="g2"><div><label class="mu">Mensalidade (€)</label><input type="number" step="0.01" value="'+s.fee+'" onchange="updFee(\''+s.id+'\',this.value)"></div><div><label class="mu">'+(p?'Valor pago (€)':'Valor a registar (€)')+'</label><input id="pa'+s.id+'" type="number" step="0.01" value="'+(p?p.amount:s.fee)+'"'+(p?' onchange="updPay(\''+p.id+'\',this.value)"':'')+'></div></div><div class="ac"><select id="pm'+s.id+'" style="width:auto;margin:0"'+(p?' onchange="updMeth(\''+p.id+'\',this.value)"':'')+'>'+MET.map(function(m){return'<option'+((p?PM[p.id]:"")==m?' selected':'')+'>'+m+'</option>'}).join('')+'</select>'+B(p?"Anular pagamento":"Registar pago",p?"r":"on","payTog",s.id)+'</div></div>'}
+var CV="1.0";
+var POL='<details style="margin:6px 0"><summary class="mu" style="text-decoration:underline">Ler a Política de Privacidade</summary><div class="mu" style="margin-top:8px"><p><b>Responsável pelo tratamento:</b> Pedro Machado (Pedro Machado Fitness). Contacto: [e-mail de contacto].</p><p><b>Dados que tratamos:</b> nome, e-mail, data de nascimento, género e altura; marcações e presenças em treinos; planos e cargas; avaliações físicas (peso, massa gorda, massa muscular, gordura visceral); refeições registadas; pagamentos e fidelizações; mensagens trocadas no chat.</p><p><b>Para que usamos:</b> acompanhar o teu treino e evolução, gerir marcações, pagamentos e fidelizações, e comunicar contigo. O fundamento é a execução do serviço contratado e, para os dados de saúde (avaliações físicas e alimentação), o teu consentimento explícito.</p><p><b>Consentimento:</b> podes retirá-lo a qualquer momento, o que não afeta o tratamento já feito. Sem ele não é possível acompanhar a tua evolução na app.</p><p><b>Quem tem acesso:</b> o treinador e quem ele autorizar. Os dados estão alojados na Supabase (base de dados) e na Netlify (site), como subcontratantes. Não vendemos nem partilhamos os teus dados para publicidade.</p><p><b>Conservação:</b> enquanto fores aluno e até 12 meses depois, salvo obrigação legal (por exemplo, registos de faturação).</p><p><b>Os teus direitos:</b> acesso, retificação, apagamento, limitação, portabilidade e oposição. Podes descarregar os teus dados e pedir a eliminação da conta no separador Perfil, ou contactar-nos. Tens também direito a apresentar queixa à CNPD (www.cnpd.pt).</p><p><b>Segurança:</b> cada aluno só vê os seus próprios dados; a ligação é cifrada e o acesso exige e-mail e palavra-passe.</p></div></details>';
+function consentH(){return POL+'<label class="ck" style="align-items:flex-start"><input type="checkbox" id="c1"><span class="mu">Li e aceito a Política de Privacidade. Tenho 18 anos ou mais, ou tenho autorização do meu representante legal.</span></label><label class="ck" style="align-items:flex-start"><input type="checkbox" id="c2"><span class="mu">Dou o meu consentimento explícito ao tratamento dos meus dados de saúde (peso, composição corporal, alimentação e treino) para o acompanhamento pelo treinador. Posso retirá-lo a qualquer momento.</span></label>'}
+function vGate(){return'<div class="card"><div class="b">Antes de continuares</div><p class="mu">Para usares a app precisamos do teu consentimento para tratar os teus dados.</p>'+consentH()+'<button class="btn" onclick="acceptC()">Aceitar e continuar</button> <button class="btn o" onclick="out()">Sair</button></div>'}
+async function acceptC(){if(!$("c1").checked||!$("c2").checked){alert("Tens de aceitar as duas opções para continuar.");return}var t=new Date().toISOString(),r=await sb.from("profiles").update({consent_at:t,consent_version:CV}).eq("id",me.id);if(r.error){alert(r.error.message);return}me.consent_at=t;R()}
+async function expMy(){var m=await sb.from("meals").select("*"),b=new Blob([JSON.stringify({perfil:me,treinos:SE,pagamentos:PA,avaliacoes:EV,refeicoes:m.data||[],cargas:LD,fidelizacoes:LY},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="os-meus-dados.json";a.click()}
+async function reqDel(){if(!confirm("Enviar ao treinador o pedido para eliminar a tua conta e todos os teus dados?"))return;var r=await sb.from("messages").insert({student_id:me.id,body:"Pedido de eliminação da minha conta e dos meus dados (RGPD)."});alert(r.error?r.error.message:"Pedido enviado ao treinador no Chat.")}
+function privH(){return'<h2>Privacidade</h2><div class="card"><div class="mu">Consentimento dado em '+(me.consent_at?dfmt(me.consent_at.slice(0,10)):"—")+'</div>'+POL+'<div class="ac"><button class="btn o" onclick="expMy()">Descarregar os meus dados</button><button class="btn r" onclick="reqDel()">Pedir eliminação da conta</button></div></div>'}
+var LL=[],SA=[],showIn=false;
+function stuA(id){return SA.find(function(s){return s.id==id})}
+function spark(t,pts,u){if(pts.length<2)return"";var W=300,H=100,p=14,ys=pts.map(function(q){return q.y}),mn=Math.min.apply(null,ys),mx=Math.max.apply(null,ys),sp=mx-mn||1,xs=function(i){return p+i*(W-2*p)/(pts.length-1)},yf=function(v){return H-p-(v-mn)/sp*(H-2*p)};
+var d=pts.map(function(q,i){return xs(i).toFixed(1)+","+yf(q.y).toFixed(1)}).join(" "),f=pts[0],l=pts[pts.length-1],df=r1(l.y-f.y);
+return'<div class="card"><div class="row"><span class="b">'+t+'</span><span class="mu">'+r1(f.y)+' → '+r1(l.y)+u+' ('+(df>0?"+":"")+df+')</span></div><svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block"><polyline points="'+d+'" style="fill:none;stroke:var(--tx);stroke-width:2"/>'+pts.map(function(q,i){return'<circle cx="'+xs(i).toFixed(1)+'" cy="'+yf(q.y).toFixed(1)+'" r="3" style="fill:var(--tx)"/>'}).join('')+'</svg><div class="row mu"><span>'+f.x+'</span><span>'+l.x+'</span></div></div>'}
+function evCharts(s){var L=EV.filter(function(e){return e.student_id==s.id}).sort(function(a,b){return a.day<b.day?-1:1});if(L.length<2)return'<p class="mu">Com 2 ou mais avaliações aparecem aqui os gráficos de evolução.</p>';var P=function(k){return L.map(function(e){return{x:dfmt(e.day).slice(0,5),y:Number(e[k])}})};return spark("Peso",P("weight_kg")," kg")+spark("Massa gorda",P("body_fat_pct"),"%")+spark("Massa muscular",P("muscle_kg")," kg")}
+function lhist(sid,pid,pos){var L=LL.filter(function(q){return q.student_id==sid&&q.plan_id==pid&&q.exercise_idx==pos}).sort(function(a,b){return a.day<b.day?-1:1});if(!L.length)return"";return'<details class="mu" style="margin:0 0 6px"><summary>Histórico de cargas ('+L.length+')</summary>'+spark("Progressão",L.map(function(q){return{x:dfmt(q.day).slice(0,5),y:Number(q.kg)}})," kg")+L.slice().reverse().map(function(q){return'<div class="row"><span>'+dfmt(q.day)+'</span><b>'+q.kg+' kg</b></div>'}).join('')+'</details>'}
+function goalsH(s){var g=function(k,l){return'<div><label class="mu">'+l+'</label><input type="number" value="'+(s[k]==null?"":s[k])+'" onchange="upd(\''+s.id+'\',\''+k+'\',this.value)"></div>'};return'<div class="mu" style="margin-top:6px">Metas diárias de nutrição</div><div class="g2">'+g("goal_kcal","Calorias (kcal)")+g("goal_protein","Proteína (g)")+g("goal_carbs","Hidratos (g)")+g("goal_fat","Gordura (g)")+'</div>'}
+function gbar(l,v,g,u){if(!g)return"";var p=Math.min(100,Math.round(v/g*100));return'<div style="margin-top:8px"><div class="row mu"><span>'+l+'</span><span>'+Math.round(v)+' / '+Math.round(g)+u+'</span></div><div style="height:8px;background:var(--ac2);border-radius:4px"><div style="width:'+p+'%;height:8px;background:var(--ac);border-radius:4px"></div></div></div>'}
+function goalsBar(t){if(!me.goal_kcal&&!me.goal_protein&&!me.goal_carbs&&!me.goal_fat)return"";return'<div class="card"><div class="b">Metas de hoje</div>'+gbar("Calorias",t.k,me.goal_kcal," kcal")+gbar("Proteína",t.p,me.goal_protein," g")+gbar("Hidratos",t.c,me.goal_carbs," g")+gbar("Gordura",t.f,me.goal_fat," g")+'</div>'}
+function actH(s){return'<p>'+B(s.active===false?"Reativar aluno":"Desativar aluno","r","togAct",s.id)+'</p><p class="mu">Desativar esconde o aluno e impede o acesso, mas guarda o histórico e a faturação. Para apagar definitivamente, elimina o utilizador em Authentication → Users no Supabase.</p>'}
+async function togAct(id){var s=stuA(id),on=s.active!==false;if(!confirm(on?"Desativar este aluno? Deixa de ter acesso e de aparecer nas listas.":"Reativar este aluno?"))return;op[id]=true;var r=await sb.from("profiles").update({active:!on}).eq("id",id);if(r.error)alert(r.error.message);await rl()}
+var SLOTS=[],WEEKS=[],BK=[],DEC=[],OC={},TPL={},sent={},nuS=null,WK=null;
+var DEF={convite:"Olá! Já estão disponíveis os treinos da semana 👉 {link}",lembrete:"Olá {nome}! Ainda não escolheste os treinos da semana ({semana}) 👉 {link}",confirmacao:"Olá {nome}! ✅ Treino confirmado:\n{treinos}\nAté já! 💪 Pedro Machado Fitness",recusa:"Olá {nome}! Não deu para esse horário:\n{treinos}\nEscolhe outro aqui 👉 {link}"},TN={convite:"Convite",lembrete:"Lembrete",confirmacao:"Confirmação",recusa:"Recusa"};
+var MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],DL=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+function mon(d){var x=new Date(d+"T12:00:00");x.setDate(x.getDate()-(x.getDay()+6)%7);return iso(x)}
+function ad(d,n){var x=new Date(d+"T12:00:00");x.setDate(x.getDate()+n);return iso(x)}
+WK=mon(T);
+function wlab(w){var a=new Date(w+"T12:00:00"),b=new Date(ad(w,6)+"T12:00:00");return a.getDate()+"–"+b.getDate()+" "+MES[b.getMonth()]}
+function wpub(w){var x=WEEKS.find(function(k){return k.week_start==w});return!!(x&&x.published)}
+function wsl(w){return SLOTS.filter(function(s){return s.day>=w&&s.day<ad(w,7)})}
+function srt(a,b){return(a.day+a.time)<(b.day+b.time)?-1:1}
+function stxt(s){var d=new Date(s.day+"T12:00:00");return DL[d.getDay()]+", "+d.getDate()+" "+MES[d.getMonth()]+" – "+s.time.slice(0,2)+"h"+s.time.slice(3,5)}
+function tpl(k,v){var t=TPL[k]||DEF[k];Object.keys(v).forEach(function(x){t=t.split("{"+x+"}").join(v[x])});return t}
+function openWa(ph,t){var d=(ph||"").replace(/\D/g,"");if(d.length==9)d="351"+d;if(!d){alert("Falta o telemóvel deste aluno (ficha do aluno).");return}window.open("https://wa.me/"+d+"?text="+encodeURIComponent(t),"_blank")}
+function answered(sid,w){var ids=wsl(w).map(function(x){return x.id});return BK.some(function(b){return b.student_id==sid&&b.status!="recusado"&&ids.indexOf(b.slot_id)>=0})||DEC.some(function(d){return d.student_id==sid&&d.week_start==w})}
+function wk(n){WK=ad(WK,7*n);R()}
+function wnav(){return'<div class="row"><button class="btn o" onclick="wk(-1)">←</button><div class="b" style="font-size:18px">'+wlab(WK)+'</div><button class="btn o" onclick="wk(1)">→</button></div>'}
+async function pubW(w){await sb.from("weeks").upsert({week_start:w,published:!wpub(w)});await rl()}
+async function dupW(w){var pv=wsl(ad(w,-7));if(!pv.length){alert("A semana anterior não tem treinos.");return}if(wsl(w).length&&!confirm("Esta semana já tem treinos. Copiar mesmo assim?"))return;var r=await sb.from("slots").insert(pv.map(function(s){return{day:ad(s.day,7),time:s.time,duration_min:s.duration_min,capacity:s.capacity,note:s.note}}));if(r.error)alert(r.error.message);await rl()}
+async function addSl(){var ds=[0,1,2,3,4,5,6].filter(function(i){return $("nd"+i).checked}),t=$("ntm").value;if(!ds.length||!t){alert("Escolhe os dias e a hora.");return}var r=await sb.from("slots").insert(ds.map(function(i){return{day:ad(WK,i),time:t,duration_min:+$("ndu").value,capacity:+$("ncp").value||6,note:$("nnt").value.trim()||null}}));if(r.error)alert(r.error.message);await rl()}
+async function saveSl(id){op[id]=true;var t=$("et"+id).value,r=await sb.from("slots").update({time:t,capacity:+$("ec"+id).value||1,note:$("en"+id).value.trim()||null}).eq("id",id);if(r.error)alert(r.error.message);else await sb.from("sessions").update({time:t}).eq("slot_id",id);await rl()}
+async function delSl(id){if(!confirm("Apagar este treino e as reservas?"))return;await sb.from("sessions").delete().eq("slot_id",id);await sb.from("slots").delete().eq("id",id);await rl()}
+async function mkSess(sid,st){var s=SLOTS.find(function(x){return x.id==sid}),e=await sb.from("sessions").select("id").eq("slot_id",sid).eq("student_id",st);if(!(e.data||[]).length)await sb.from("sessions").insert({student_id:st,day:s.day,time:s.time,slot_id:sid})}
+async function addBk(sid){var st=$("as"+sid).value;if(!st)return;op[sid]=true;await sb.from("bookings").upsert({slot_id:sid,student_id:st,status:"confirmado"},{onConflict:"slot_id,student_id"});await mkSess(sid,st);await rl()}
+async function rmBk(id){var b=BK.find(function(x){return x.id==id});op[b.slot_id]=true;await sb.from("sessions").delete().eq("slot_id",b.slot_id).eq("student_id",b.student_id);await sb.from("bookings").delete().eq("id",id);await rl()}
+function cpy(){navigator.clipboard.writeText(tpl("convite",{link:location.origin,semana:wlab(WK)}));alert("Mensagem copiada.")}
+function slotCard(s){var b=BK.filter(function(x){return x.slot_id==s.id&&x.status!="recusado"}),pd=b.filter(function(x){return x.status=="pendente"}).length;
+return'<details class="card" '+(op[s.id]?'open':'')+' ontoggle="op[\''+s.id+'\']=this.open"><summary class="b">'+fd(s.day)+' · '+s.time.slice(0,5)+' <span class="mu">· '+b.length+'/'+s.capacity+(pd?' · '+pd+' por confirmar':'')+'</span></summary><div class="mu">'+s.duration_min+' min'+(s.note?' · '+esc(s.note):'')+'</div>'+b.map(function(x){var p=stuA(x.student_id)||{name:"?"};return'<div class="row" style="margin-top:6px"><span>'+esc(p.name)+' <span class="tag'+(x.status=="confirmado"?' ok':'')+'">'+(x.status=="confirmado"?"Confirmado":"Pendente")+'</span></span>'+B("Remover","r","rmBk",x.id)+'</div>'}).join('')+'<div class="g2" style="margin-top:8px"><select id="as'+s.id+'">'+ST.map(function(p){return'<option value="'+p.id+'">'+esc(p.name)+'</option>'}).join('')+'</select><button class="btn" onclick="addBk(\''+s.id+'\')">Adicionar</button></div><div class="g2"><input id="et'+s.id+'" type="time" value="'+s.time.slice(0,5)+'"><input id="ec'+s.id+'" type="number" value="'+s.capacity+'"></div><input id="en'+s.id+'" placeholder="Nota" value="'+esc(s.note||"")+'"><div class="ac">'+B("Guardar","o","saveSl",s.id)+B("Apagar treino","r","delSl",s.id)+'</div></details>'}
+function vSem(){var pub=wpub(WK),h=wnav()+'<div class="ac">'+B(pub?"Despublicar":"Publicar semana",pub?"r":"","pubW",WK)+B("Duplicar semana anterior","o","dupW",WK)+'</div><p class="mu">'+(pub?'Publicada: os alunos já podem marcar.':'Não publicada: os alunos ainda não veem estes treinos.')+'</p>';
+if(pub){var m=tpl("convite",{link:location.origin,semana:wlab(WK)});h+='<div class="card"><div class="mu">Convite da semana</div><div style="white-space:pre-wrap">'+esc(m)+'</div><div class="ac"><a class="btn" target="_blank" href="https://wa.me/?text='+encodeURIComponent(m)+'">Partilhar no WhatsApp</a><button class="btn o" onclick="cpy()">Copiar mensagem</button></div></div>'}
+h+='<div class="card"><div class="b">Novo treino</div><div class="mu">Dias (podes escolher vários)</div>'+[0,1,2,3,4,5,6].map(function(i){return'<label class="ck"><input type="checkbox" id="nd'+i+'">'+fd(ad(WK,i))+'</label>'}).join('')+'<div class="g2"><input id="ntm" type="time" value="18:00"><select id="ndu"><option value="45">45 min</option><option value="60" selected>60 min</option><option value="90">90 min</option></select></div><div class="g2"><input id="ncp" type="number" value="6" placeholder="Vagas"><input id="nnt" placeholder="Nota (opcional)"></div><button class="btn" onclick="addSl()">Criar treino</button></div><h2>Treinos · '+wsl(WK).length+'</h2>';
+return h+wsl(WK).sort(srt).map(slotCard).join('')}
+function pend(){var g={};BK.filter(function(b){return b.status=="pendente"&&stu(b.student_id)}).forEach(function(b){(g[b.student_id]=g[b.student_id]||[]).push(b)});return Object.keys(g).map(function(k){return{sid:k,bk:g[k].sort(function(a,b){return a.created_at<b.created_at?-1:1})}}).sort(function(a,b){return a.bk[0].created_at<b.bk[0].created_at?-1:1})}
+function vIni(){var P=pend(),h='<h2>Por confirmar · '+P.length+'</h2>';if(!P.length)h+='<p class="mu">Não há pedidos por confirmar.</p>';
+P.forEach(function(g){var s=stu(g.sid);h+='<div class="card"><div class="b">'+esc(s.name)+'</div><div class="mu">'+esc(s.phone||"sem telemóvel")+'</div>'+g.bk.map(function(b){var x=SLOTS.find(function(q){return q.id==b.slot_id});return x?'<div class="row" style="margin-top:6px"><span>'+stxt(x)+'</span>'+B("Recusar","r","recBk",b.id)+'</div>':''}).join('')+'<div class="ac">'+B("Confirmar e abrir WhatsApp","","cfG",g.sid)+'</div></div>'});
+var n=ST.filter(function(s){return answered(s.id,WK)}).length;
+return h+'<h2>Semana '+wlab(WK)+'</h2><div class="card"><div class="mu">'+(wpub(WK)?'Publicada':'Não publicada')+' · '+wsl(WK).length+' treinos · '+n+'/'+ST.length+' alunos responderam</div></div>'}
+async function cfG(sid){var s=stu(sid),bs=BK.filter(function(b){return b.student_id==sid&&b.status=="pendente"}),ls=bs.map(function(b){return SLOTS.find(function(x){return x.id==b.slot_id})}).filter(Boolean);
+openWa(s.phone,tpl("confirmacao",{nome:s.name.split(" ")[0],treinos:ls.map(function(x){return"• "+stxt(x)}).join("\n"),link:location.origin,semana:wlab(WK)}));
+for(var i=0;i<bs.length;i++){await sb.from("bookings").update({status:"confirmado"}).eq("id",bs[i].id);await mkSess(bs[i].slot_id,sid)}await rl()}
+async function recBk(id){var b=BK.find(function(x){return x.id==id}),s=stu(b.student_id),x=SLOTS.find(function(q){return q.id==b.slot_id});
+openWa(s.phone,tpl("recusa",{nome:s.name.split(" ")[0],treinos:"• "+stxt(x),link:location.origin,semana:wlab(WK)}));
+await sb.from("sessions").delete().eq("slot_id",b.slot_id).eq("student_id",b.student_id);await sb.from("bookings").update({status:"recusado"}).eq("id",id);await rl()}
+function vRes(){var N=ST.filter(function(s){return!answered(s.id,WK)}),D=ST.filter(function(s){return DEC.some(function(d){return d.student_id==s.id&&d.week_start==WK})}),h=wnav()+'<h2>Ainda não responderam · '+N.length+'</h2>';
+N.forEach(function(s){h+='<div class="card row"><div><div class="b">'+esc(s.name)+'</div><div class="mu">'+esc(s.phone||"sem telemóvel")+'</div></div>'+(sent[WK+s.id]?'<span class="tag ok">Enviado ✓</span>':B("Lembrete","o","lemb",s.id))+'</div>'});
+if(D.length)h+='<h2>Esta semana não podem</h2>'+D.map(function(s){return'<div class="card">'+esc(s.name)+'</div>'}).join('');return h}
+function lemb(sid){var s=stu(sid);sent[WK+sid]=1;openWa(s.phone,tpl("lembrete",{nome:s.name.split(" ")[0],link:location.origin,semana:wlab(WK)}));R()}
+function vMsg(){return'<p class="mu">Variáveis: {nome} {treinos} {link} {semana}</p>'+Object.keys(DEF).map(function(k){return'<div class="card"><div class="b">'+TN[k]+'</div><textarea id="tp'+k+'" rows="4">'+esc(TPL[k]||DEF[k])+'</textarea><div class="mu" style="white-space:pre-wrap">'+esc(tpl(k,{nome:"Ana",treinos:"• Segunda, 16 nov – 18h00",link:location.origin,semana:"16–22 nov"}))+'</div><div class="ac">'+B("Guardar","","saveT",k)+B("Repor original","o","resT",k)+'</div></div>'}).join('')}
+async function saveT(k){await sb.from("msg_templates").upsert({key:k,body:$("tp"+k).value});await rl()}
+async function resT(k){await sb.from("msg_templates").delete().eq("key",k);await rl()}
+function vNuP(){if(!ST.length)return'<p class="mu">Ainda não há alunos.</p>';if(!stu(nuS))nuS=ST[0].id;var h='<select onchange="nuS=this.value;R()">'+ST.map(function(s){return'<option value="'+s.id+'"'+(s.id==nuS?' selected':'')+'>'+esc(s.name)+'</option>'}).join('')+'</select>',m0=me;me=stu(nuS);var b=vNu();me=m0;return h+b}
+function cnt(){var ms=[];PA.forEach(function(p){if(ms.indexOf(p.month)<0)ms.push(p.month)});var tt=PA.reduce(function(t,p){return t+Number(p.amount)},0);return'<div class="g2"><div class="card"><div class="mu">Mensalidades pagas</div><div class="big">'+PA.length+'</div><div class="mu">'+PA.filter(function(p){return p.month==M}).length+' este mês</div></div><div class="card"><div class="mu">Média mensal de faturação</div><div class="big">'+eur(tt/Math.max(ms.length,1))+'</div></div></div>'}
+function vMar(){var w0=mon(T),W=[w0,ad(w0,7),ad(w0,14)].filter(wpub);if(!W.length)return'<p class="mu">Ainda não há treinos publicados. O treinador avisa-te quando estiverem abertos.</p>';var h="";
+W.forEach(function(w){var dc=DEC.some(function(d){return d.week_start==w&&d.student_id==me.id});h+='<h2>'+wlab(w)+'</h2><div class="ac">'+B(dc?"Já posso esta semana":"Esta semana não posso","o","decl",w)+'</div>';
+wsl(w).filter(function(s){return s.day>=T}).sort(srt).forEach(function(s){var b=BK.find(function(x){return x.slot_id==s.id&&x.student_id==me.id&&x.status!="recusado"}),left=s.capacity-(OC[s.id]||0);
+h+='<div class="card row"><div><div class="b">'+fd(s.day)+' · '+s.time.slice(0,5)+'</div><div class="mu">'+(s.note?esc(s.note)+' · ':'')+Math.max(left,0)+' vagas'+(b?' · <b>'+(b.status=="confirmado"?"Confirmado":"Pendente")+'</b>':'')+'</div></div>'+(b?B("Cancelar","r","cnc",s.id):'<button class="btn" '+(left<1?'disabled':'')+' onclick="res(\''+s.id+'\')">'+(left<1?'Cheio':'Marcar')+'</button>')+'</div>'})});return h}
+async function res(id){var r=await sb.rpc("reservar",{p_slot:id}),m={cheio:"Este treino acabou de encher. Escolhe outro.",tarde:"Já não é possível marcar este treino (faltam menos de 12 horas). Fala com o treinador.",fechado:"Esta semana não está aberta."};if(r.data!="ok")alert(m[r.data]||(r.error&&r.error.message)||"Erro");else alert("Pedido recebido! Fica pendente até o treinador confirmar.");await rl()}
+async function cnc(id){if(!confirm("Cancelar esta marcação?"))return;var r=await sb.rpc("cancelar_reserva",{p_slot:id});if(r.data=="tarde")alert("Já não é possível cancelar (faltam menos de 12 horas). Fala com o treinador.");await rl()}
+async function decl(w){var d=DEC.some(function(x){return x.week_start==w&&x.student_id==me.id}),r=d?await sb.from("week_decline").delete().eq("week_start",w).eq("student_id",me.id):await sb.from("week_decline").insert({week_start:w,student_id:me.id});if(r.error)alert(r.error.message);await rl()}
+var TEL="",TD=null,telAsk=false,TELP="";try{TEL=localStorage.getItem("pmf_tel")||""}catch(e){}
+function er2(t){var e=$("er2");if(e)e.textContent=t}
+async function telIn(){var p=$("tp").value.replace(/\D/g,"").slice(-9),n=$("tnm")?$("tnm").value.trim():"";if(p.length<9){er2("Escreve o teu telemóvel com 9 dígitos.");return}var r=await sb.rpc("tel_entrar",{p_phone:p,p_name:n||null});if(r.error){er2(r.error.message);return}if(r.data&&r.data.novo){telAsk=true;TELP=p;R();return}telAsk=false;TEL=p;try{localStorage.setItem("pmf_tel",p)}catch(e){}await telLoad()}
+async function telLoad(){var r=await sb.rpc("tel_semana",{p_phone:TEL});TD=r.data;if(!TD){TEL="";try{localStorage.removeItem("pmf_tel")}catch(e){}}R()}
+function telOut(){TEL="";TD=null;telAsk=false;TELP="";try{localStorage.removeItem("pmf_tel")}catch(e){}R()}
+async function telAct(fn,a){var r=await sb.rpc(fn,a);if(r.error){alert(r.error.message);return}var m={cheio:"Este treino acabou de encher. Escolhe outro.",tarde:"Já não é possível alterar este treino (faltam menos de 12 horas). Fala com o treinador.",fechado:"Esta semana não está aberta."};if(r.data&&r.data!="ok")alert(m[r.data]||"Não foi possível.");else if(fn=="tel_reservar")alert("Pedido recebido! Vais receber a confirmação no WhatsApp.");await telLoad()}
+function vTel(){if(TEL&&TD){var h='<h2>Olá, '+esc(TD.nome)+' 👋</h2><p class="mu">Escolhe os teus treinos. <a href="#" onclick="telOut();return false">Não és tu?</a></p>',W={};
+(TD.slots||[]).forEach(function(s){var w=mon(s.day);(W[w]=W[w]||[]).push(s)});var ks=Object.keys(W).sort();if(!ks.length)h+='<p class="mu">Ainda não há treinos publicados.</p>';
+ks.forEach(function(w){var dc=(TD.dec||[]).indexOf(w)>=0;h+='<div class="row"><b>'+wlab(w)+'</b><button class="btn o" onclick="telAct(\'tel_nao_posso\',{p_phone:TEL,p_week:\''+w+'\'})">'+(dc?"Já posso esta semana":"Esta semana não posso")+'</button></div>';
+W[w].forEach(function(s){var left=s.capacity-s.occ;h+='<div class="card row"><div><div class="b">'+fd(s.day)+' · '+s.time.slice(0,5)+'</div><div class="mu">'+(s.note?esc(s.note)+' · ':'')+Math.max(left,0)+' vagas'+(s.st?' · <b>'+(s.st=="confirmado"?"Confirmado":"Pendente")+'</b>':'')+'</div></div>'+(s.st?'<button class="btn r" onclick="telAct(\'tel_cancelar\',{p_phone:TEL,p_slot:\''+s.id+'\'})">Cancelar</button>':'<button class="btn" '+(left<1?'disabled':'')+' onclick="telAct(\'tel_reservar\',{p_phone:TEL,p_slot:\''+s.id+'\'})">'+(left<1?'Cheio':'Marcar')+'</button>')+'</div>'})});return h}
+return'<div class="card"><div class="b">Marcar treinos</div><p class="mu">Só precisas do teu número de telemóvel.</p><input id="tp" type="tel" placeholder="912 345 678" value="'+esc(TELP)+'">'+(telAsk?'<p class="mu">É a tua primeira vez. Como te chamas?</p><input id="tnm" placeholder="O teu nome">':'')+'<div id="er2" class="mu" style="margin:6px 0"></div><button class="btn" onclick="telIn()">Continuar</button></div>'}
+function clForm(){return'<div class="card"><div class="b">Novo cliente (só com número)</div><input id="cln" placeholder="Nome"><input id="clp" type="tel" placeholder="Telemóvel (9 dígitos)"><button class="btn" onclick="addCli()">Adicionar</button><p class="mu">Os clientes também se podem registar sozinhos pelo link e aparecem com a etiqueta Novo.</p></div>'}
+async function addCli(){var n=$("cln").value.trim(),p=$("clp").value.replace(/\D/g,"").slice(-9);if(!n||p.length<9){alert("Indica o nome e o telemóvel (9 dígitos).");return}var r=await sb.from("profiles").insert({name:n,phone:p,via_tel:true});if(r.error)alert(r.error.message);await rl()}
+function cliH(s){var h="";if(s.novo)h+='<p>'+B("Confirmar que é cliente","","cfCli",s.id)+'</p>';if(s.via_tel){var o=ST.filter(function(x){return!x.via_tel}).map(function(x){return'<option value="'+x.id+'">'+esc(x.name)+(x.email?' ('+esc(x.email)+')':'')+'</option>'}).join('');h+='<div class="mu" style="margin-top:6px">Cliente só com número. Se criar conta com e-mail, liga as duas:</div>'+(o?'<div class="g2"><select id="lg'+s.id+'">'+o+'</select><button class="btn o" onclick="lgCli(\''+s.id+'\')">Ligar à conta</button></div>':'<p class="mu">Ainda não há contas com e-mail.</p>')}return h}
+async function cfCli(id){await sb.from("profiles").update({novo:false}).eq("id",id);await rl()}
+async function lgCli(id){var n=$("lg"+id).value;if(!confirm("Juntar este cliente à conta escolhida? Os registos passam para essa conta."))return;var r=await sb.rpc("fundir",{p_old:id,p_new:n});if(r.error)alert(r.error.message);await rl()}
+function R(){var h='<img class="logo" alt="Pedro Machado Fitness" src="'+LOGO+'">';
+if(!me){$("app").innerHTML=h+vTel()+'<h2>Conta completa</h2><p class="mu">Nutrição, plano de treino, mensalidade e chat.</p><div class="card">'+vAuth()+'</div>';return}
+if(me.role!="treinador"&&!me.consent_at){$("app").innerHTML=h+vGate();return}var t=me.role=="treinador",tabs=t?[["ini","Início"],["sem","Semanas"],["res","Respostas"],["ag","Agenda"],["al","Alunos"],["nup","Nutrição"],["pl","Planos"],["ex","Exercícios"],["fi","Finanças"],["fz","Fidelização"],["ch","Chat"],["msg","Mensagens"]]:[["mr","Marcar"],["tr","Agenda"],["nu","Nutrição"],["ev","Evolução"],["ch","Chat"],["pf","Perfil"]];
+h+=seg(tabs,tab,"setTab")+({ag:vAg,al:vAl,pl:vPl,ex:vEx,fi:vFi,tr:vTr,ch:vCh,pf:vPf,ev:vEv,nu:vNu,fz:vFz,mr:vMar,ini:vIni,sem:vSem,res:vRes,msg:vMsg,nup:vNuP}[tab])();
+h+='<p style="text-align:center;margin-top:24px"><span class="mu">'+esc(me.email||"")+'</span> <button class="btn o" onclick="out()">Sair</button></p>';
+$("app").innerHTML=h;var c=document.querySelector(".chat");if(c)c.scrollTop=c.scrollHeight;if($("yc"))calcEv()}
+init();
+</script></body></html>
